@@ -2,17 +2,16 @@ package com.agendaapi.agendaapi.model;
 
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Column;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+import lombok.Builder;
 import org.hibernate.annotations.CreationTimestamp;
 import java.time.LocalDateTime;
+import java.util.List;
 
+@Builder
 @Entity
 public class Usuario {
 
@@ -25,26 +24,36 @@ public class Usuario {
 
     @NotBlank(message = "O email não pode ser vazio.")
     @Email(message = "O email deve ser válido.")
+    @Column(unique = true)
     private String email;
+
 
     @NotBlank(message = "A senha não pode ser vazia.")
     @Size(min = 6, message = "A senha deve ter pelo menos 6 caracteres.")
-    private String senha;
+    @Column(name = "senha")
+    private String password;
 
     @CreationTimestamp
     @Column(name = "criado_em", updatable = false)
     private LocalDateTime criadoEm;  // Novo campo para data de criação
 
-    // Construtores
-    public Usuario() {}
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    @JoinTable(name="users_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name="role_id"))
+    private List<Role> roles;
+
 
     public Usuario(String nome, String email, String senha) {
         this.nome = nome;
         this.email = email;
-        this.senha = senha;
+        this.password = senha;
     }
 
-    // Getters e Setters
+    public Usuario() {
+
+    }
+
     public Long getId() {
         return id;
     }
@@ -69,12 +78,12 @@ public class Usuario {
         this.email = email;
     }
 
-    public String getSenha() {
-        return senha;
+    public String getPassword() {
+        return password;
     }
 
-    public void setSenha(String senha) {
-        this.senha = senha;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public LocalDateTime getCriadoEm() {
@@ -83,5 +92,13 @@ public class Usuario {
 
     public void setCriadoEm(LocalDateTime criadoEm) {
         this.criadoEm = criadoEm;
+    }
+
+    public List<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<Role> roles) {
+        this.roles = roles;
     }
 }
