@@ -11,8 +11,9 @@ import org.hibernate.annotations.CreationTimestamp;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Builder
+
 @Entity
+@Builder
 public class Usuario {
 
     @Id
@@ -30,7 +31,7 @@ public class Usuario {
 
     @NotBlank(message = "A senha não pode ser vazia.")
     @Size(min = 6, message = "A senha deve ter pelo menos 6 caracteres.")
-    @Column(name = "senha")
+    @Column(name = "password")
     private String password;
 
     @CreationTimestamp
@@ -44,14 +45,14 @@ public class Usuario {
     private List<Role> roles;
 
 
-    public Usuario(String nome, String email, String senha) {
-        this.nome = nome;
-        this.email = email;
-        this.password = senha;
-    }
 
     public Usuario() {
 
+    }
+    public Usuario(String email, String password, List<Role> roles) {
+        this.email = email;
+        this.password = password;
+        this.roles = roles;
     }
 
     public Long getId() {

@@ -50,8 +50,8 @@
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
-			<version>1.18.36</version>
-			<scope>provided</scope>
+			<version>1.18.24</version> <!-- ou a versão mais recente -->
+			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

@@ -17,6 +17,9 @@ public class Role {
     @Enumerated(EnumType.STRING)
     private RoleName name;
 
+    public Role(String name) {
+        this.name = RoleName.valueOf(name); // Converte a string para a enumeração
+    }
     public Role() {}
 
     public Role(Long id, RoleName name) {

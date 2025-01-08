@@ -24,23 +24,23 @@ public class SecurityConfiguration {
 
 
     public static final String [] ENDPOINTS_WITH_AUTHENTICATION_NOT_REQUIRED = {
-            "/agenda/usuario/login", //url que usaremos para fazer login
-            "/agenda/usuario" //url que usaremos para criar um usuário
+            "/users/login", // Url que usaremos para fazer login
+            "/users" // Url que usaremos para criar um usuário
     };
 
     // Endpoints que requerem autenticação para serem acessados
     public static final String [] ENDPOINTS_WITH_AUTHENTICATION_REQUIRED = {
-            "/agenda/usuario/test"
+            "/users/test"
     };
 
     // Endpoints que só podem ser acessador por usuários com permissão de cliente
     public static final String [] ENDPOINTS_CUSTOMER = {
-            "/agenda/usuario/test/customer"
+            "/users/test/customer"
     };
 
     // Endpoints que só podem ser acessador por usuários com permissão de administrador
     public static final String [] ENDPOINTS_ADMIN = {
-            "/agenda/usuario/test/administrator"
+            "/users/test/administrator"
     };
 
     @Bean
