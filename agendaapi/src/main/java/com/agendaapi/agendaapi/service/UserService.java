@@ -1,10 +1,10 @@
 package com.agendaapi.agendaapi.service;
 
-import com.agendaapi.agendaapi.dto.CreateUserDto;
+import com.agendaapi.agendaapi.dto.UpdateEmailDto;
+import com.agendaapi.agendaapi.dto.UserDto;
 import com.agendaapi.agendaapi.dto.LoginUserDto;
 import com.agendaapi.agendaapi.dto.RecoveryJwtTokenDto;
 import com.agendaapi.agendaapi.model.Role;
-import com.agendaapi.agendaapi.model.RoleName;
 import com.agendaapi.agendaapi.model.Usuario;
 import com.agendaapi.agendaapi.repository.RoleRepository;
 import com.agendaapi.agendaapi.repository.UsuarioRepository;
@@ -54,17 +54,17 @@ public class UserService {
         return new RecoveryJwtTokenDto(jwtTokenService.generateToken(userDetails));
     }
 
-    public void createUser(CreateUserDto createUserDto) {
+    public void createUser(UserDto userDto) {
         // Verifica qual Role deve ser associada ao usuário
 
-        Role role = roleRepository.findByName(createUserDto.role())
+        Role role = roleRepository.findByName(userDto.role())
                 .orElseThrow(() -> new RuntimeException("Role não encontrada"));
 
         // Cria um novo usuário com os dados fornecidos e a role associada
         Usuario newUser = new Usuario(
-                createUserDto.nome(),
-                createUserDto.email(),
-                securityConfiguration.passwordEncoder().encode(createUserDto.password()),
+                userDto.nome(),
+                userDto.email(),
+                securityConfiguration.passwordEncoder().encode(userDto.password()),
                 role // Aqui associamos a role com o ID correto
         );
 
@@ -72,5 +72,59 @@ public class UserService {
 
         // Salva o novo usuário no banco de dados
         usuarioRepository.save(newUser);
+    }
+
+
+    public void updateUser(UserDto updateUserDto){
+
+
+        Usuario existingUser = usuarioRepository.findByEmail(updateUserDto.email())
+                .orElseThrow(()-> new RuntimeException("Usuario não encontrado"));
+
+
+
+        // Atualize as informações do usuário
+        if (updateUserDto.nome() != null) {
+            existingUser.setNome(updateUserDto.nome());
+        }
+        if (updateUserDto.email() != null) {
+            existingUser.setEmail(updateUserDto.email());
+        }
+        if (updateUserDto.password() != null) {
+            existingUser.setPassword(securityConfiguration.passwordEncoder().encode(updateUserDto.password()));
+        }
+        if (updateUserDto.role() != null) {
+            Role role = roleRepository.findByName(updateUserDto.role())
+                    .orElseThrow(() -> new RuntimeException("Role não encontrada"));
+            existingUser.setRole(role);
+        }
+
+        // Salva o novo usuário no banco de dados
+        usuarioRepository.save(existingUser);
+    }
+
+
+    public RecoveryJwtTokenDto updateEmail(UpdateEmailDto updateEmailDto) {
+
+        // Busca o usuário pelo e-mail atual
+        Usuario existingUser = usuarioRepository.findByEmail(updateEmailDto.email())
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+
+        // Atualiza o e-mail, se for fornecido
+        if (updateEmailDto.newemail() != null) {
+            existingUser.setEmail(updateEmailDto.newemail());
+        }
+
+        // Salva o usuário com o novo e-mail
+        usuarioRepository.save(existingUser);
+
+        // Cria um UserDetailsImpl atualizado com o novo e-mail
+        UserDetailsImpl userDetails = new UserDetailsImpl(existingUser);
+
+        // Gera um novo token JWT com o e-mail atualizado
+        String newJwtToken = jwtTokenService.generateToken(userDetails);
+
+        // Retorna o novo token no DTO
+        return new RecoveryJwtTokenDto(newJwtToken);
     }
 }

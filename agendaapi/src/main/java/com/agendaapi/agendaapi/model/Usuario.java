@@ -1,15 +1,9 @@
 package com.agendaapi.agendaapi.model;
 
-
-
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 import lombok.Builder;
 
 import java.time.ZonedDateTime;
-
 
 @Entity
 @Builder
@@ -19,35 +13,27 @@ public class Usuario {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "O nome não pode ser vazio.")
     private String nome;
 
-    @NotBlank(message = "O email não pode ser vazio.")
-    @Email(message = "O email deve ser válido.")
     @Column(unique = true)
     private String email;
 
-
-    @NotBlank(message = "A senha não pode ser vazia.")
-    @Size(min = 6, message = "A senha deve ter pelo menos 6 caracteres.")
     @Column(name = "password")
     private String password;
 
-
     @Column(name = "criado_em")
-    private ZonedDateTime criadoEm;  // Novo campo para data de criação
+    private ZonedDateTime criadoEm; // Campo para data de criação
 
     // Relacionamento muitos para um (um usuário tem uma única role)
     @ManyToOne(fetch = FetchType.EAGER) // EAGER se você quiser carregar a role junto ao usuário
     @JoinColumn(name = "role_id", nullable = false) // Chave estrangeira para a role
     private Role role;
 
-
-
     public Usuario() {
 
     }
-    public Usuario(String nome,String email, String password, Role role) {
+
+    public Usuario(String nome, String email, String password, Role role) {
         this.nome = nome;
         this.email = email;
         this.password = password;
@@ -62,27 +48,27 @@ public class Usuario {
         this.id = id;
     }
 
-    public @NotBlank(message = "O nome não pode ser vazio.") String getNome() {
+    public String getNome() {
         return nome;
     }
 
-    public void setNome(@NotBlank(message = "O nome não pode ser vazio.") String nome) {
+    public void setNome(String nome) {
         this.nome = nome;
     }
 
-    public @NotBlank(message = "O email não pode ser vazio.") @Email(message = "O email deve ser válido.") String getEmail() {
+    public String getEmail() {
         return email;
     }
 
-    public void setEmail(@NotBlank(message = "O email não pode ser vazio.") @Email(message = "O email deve ser válido.") String email) {
+    public void setEmail(String email) {
         this.email = email;
     }
 
-    public @NotBlank(message = "A senha não pode ser vazia.") @Size(min = 6, message = "A senha deve ter pelo menos 6 caracteres.") String getPassword() {
+    public String getPassword() {
         return password;
     }
 
-    public void setPassword(@NotBlank(message = "A senha não pode ser vazia.") @Size(min = 6, message = "A senha deve ter pelo menos 6 caracteres.") String password) {
+    public void setPassword(String password) {
         this.password = password;
     }
 

@@ -1,46 +1,98 @@
 package com.agendaapi.agendaapi.controller;
 
-import com.agendaapi.agendaapi.dto.CreateUserDto;
+import com.agendaapi.agendaapi.dto.UpdateEmailDto;
+import com.agendaapi.agendaapi.dto.UserDto;
 import com.agendaapi.agendaapi.dto.LoginUserDto;
 import com.agendaapi.agendaapi.dto.RecoveryJwtTokenDto;
 import com.agendaapi.agendaapi.service.UserService;
+import jakarta.validation.Valid; // Importa a anotação @Valid
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/users")
-public class UsuarioController{
+public class UsuarioController {
 
     @Autowired
     private UserService userService;
 
     @PostMapping("/login")
-    public ResponseEntity<RecoveryJwtTokenDto> authenticateUser(@RequestBody LoginUserDto loginUserDto) {
+    public ResponseEntity<?> authenticateUser(
+            @Valid @RequestBody LoginUserDto loginUserDto, // Aplica validação no DTO
+            BindingResult bindingResult) { // Recebe o resultado da validação
+        if (bindingResult.hasErrors()) {
+            // Retorna erro 400 com detalhes dos erros de validação
+            List<String> errors = bindingResult.getAllErrors()
+                    .stream()
+                    .map(DefaultMessageSourceResolvable::getDefaultMessage)
+                    .toList();
+            return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+        }
         RecoveryJwtTokenDto token = userService.authenticateUser(loginUserDto);
         return new ResponseEntity<>(token, HttpStatus.OK);
     }
 
-    @PostMapping
-    public ResponseEntity<Void> createUser(@RequestBody CreateUserDto createUserDto) {
-        userService.createUser(createUserDto);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+    @PostMapping("/create")
+    public ResponseEntity<?> createUser(
+            @Valid @RequestBody UserDto userDto, // Aplica validação no DTO
+            BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            // Retorna erro 400 com detalhes dos erros de validação
+            List<String> errors = bindingResult.getAllErrors()
+                    .stream()
+                    .map(error -> error.getDefaultMessage())
+                    .toList();
+            return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+        }
+        userService.createUser(userDto);
+        return new ResponseEntity<>("Usuario criado com sucesso!", HttpStatus.CREATED);
     }
 
-    @GetMapping("/test")
-    public ResponseEntity<String> getAuthenticationTest() {
-        return new ResponseEntity<>("Autenticado com sucesso", HttpStatus.OK);
+    @PutMapping("/config/update")
+    public ResponseEntity<?> updateUser(
+            @Valid @RequestBody UserDto userDto, // Aplica validação no DTO
+            BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            // Retorna erro 400 com detalhes dos erros de validação
+            List<String> errors = bindingResult.getAllErrors()
+                    .stream()
+                    .map(error -> error.getDefaultMessage())
+                    .toList();
+            return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+        }
+        userService.updateUser(userDto);
+        return new ResponseEntity<>("Usuario alterado com sucesso!", HttpStatus.OK);
+    }
+
+    @PutMapping("/config/update/email")
+    public ResponseEntity<?> updateEmail(
+            @Valid @RequestBody UpdateEmailDto updateEmailDto, // Aplica validação no DTO
+            BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            // Retorna erro 400 com detalhes dos erros de validação
+            List<String> errors = bindingResult.getAllErrors()
+                    .stream()
+                    .map(error -> error.getDefaultMessage())
+                    .toList();
+            return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+        }
+        RecoveryJwtTokenDto newToken = userService.updateEmail(updateEmailDto);
+        return new ResponseEntity<>(newToken, HttpStatus.OK);
     }
 
     @GetMapping("/test/customer")
     public ResponseEntity<String> getCustomerAuthenticationTest() {
-        return new ResponseEntity<>("Cliente autenticado com sucesso", HttpStatus.OK);
+        return new ResponseEntity<>("Cliente autenticado com sucesso.", HttpStatus.OK);
     }
 
     @GetMapping("/test/administrator")
     public ResponseEntity<String> getAdminAuthenticationTest() {
-        return new ResponseEntity<>("Administrador autenticado com sucesso", HttpStatus.OK);
+        return new ResponseEntity<>("Administrador autenticado com sucesso.", HttpStatus.OK);
     }
-
 }
