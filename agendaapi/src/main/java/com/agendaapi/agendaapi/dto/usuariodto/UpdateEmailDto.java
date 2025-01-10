@@ -1,4 +1,4 @@
-package com.agendaapi.agendaapi.dto;
+package com.agendaapi.agendaapi.dto.usuariodto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

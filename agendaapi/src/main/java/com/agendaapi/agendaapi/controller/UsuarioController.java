@@ -1,9 +1,9 @@
 package com.agendaapi.agendaapi.controller;
 
-import com.agendaapi.agendaapi.dto.UpdateEmailDto;
-import com.agendaapi.agendaapi.dto.UserDto;
-import com.agendaapi.agendaapi.dto.LoginUserDto;
-import com.agendaapi.agendaapi.dto.RecoveryJwtTokenDto;
+import com.agendaapi.agendaapi.dto.usuariodto.UpdateEmailDto;
+import com.agendaapi.agendaapi.dto.usuariodto.UserDto;
+import com.agendaapi.agendaapi.dto.usuariodto.LoginUserDto;
+import com.agendaapi.agendaapi.dto.usuariodto.RecoveryJwtTokenDto;
 import com.agendaapi.agendaapi.service.UserService;
 import jakarta.validation.Valid; // Importa a anotação @Valid
 import org.springframework.beans.factory.annotation.Autowired;

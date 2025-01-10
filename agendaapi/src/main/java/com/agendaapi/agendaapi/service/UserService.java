@@ -1,9 +1,9 @@
 package com.agendaapi.agendaapi.service;
 
-import com.agendaapi.agendaapi.dto.UpdateEmailDto;
-import com.agendaapi.agendaapi.dto.UserDto;
-import com.agendaapi.agendaapi.dto.LoginUserDto;
-import com.agendaapi.agendaapi.dto.RecoveryJwtTokenDto;
+import com.agendaapi.agendaapi.dto.usuariodto.UpdateEmailDto;
+import com.agendaapi.agendaapi.dto.usuariodto.UserDto;
+import com.agendaapi.agendaapi.dto.usuariodto.LoginUserDto;
+import com.agendaapi.agendaapi.dto.usuariodto.RecoveryJwtTokenDto;
 import com.agendaapi.agendaapi.model.Role;
 import com.agendaapi.agendaapi.model.Usuario;
 import com.agendaapi.agendaapi.repository.RoleRepository;
@@ -83,7 +83,7 @@ public class UserService {
 
 
 
-        // Atualize as informações do usuário
+        // Atualiza as informações do usuário
         if (updateUserDto.nome() != null) {
             existingUser.setNome(updateUserDto.nome());
         }
