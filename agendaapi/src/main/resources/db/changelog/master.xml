@@ -5,5 +5,9 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.22.xsd">
 
-    <include file="V1_create_usuario_and_roles_tables.xml" />
+    <!-- Inclui o arquivo V1 para criar as tabelas 'usuario' e 'role' -->
+    <include file="classpath:db/changelog/V1_create_usuario_and_roles_tables.xml" />
+
+    <!-- Inclui o arquivo V2 para inserir as roles -->
+    <include file="classpath:db/changelog/V2_insert_roles.xml" />
 </databaseChangeLog>

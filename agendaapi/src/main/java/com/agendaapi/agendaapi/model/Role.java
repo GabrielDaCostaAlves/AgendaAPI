@@ -7,7 +7,7 @@ import lombok.Builder;
 
 @Entity
 @Builder
-@Table(name="roles")
+@Table(name="role")
 public class Role {
 
     @Id
@@ -17,15 +17,9 @@ public class Role {
     @Enumerated(EnumType.STRING)
     private RoleName name;
 
-    public Role(String name) {
-        this.name = RoleName.valueOf(name); // Converte a string para a enumeração
-    }
-    public Role() {}
 
-    public Role(Long id, RoleName name) {
-        this.id = id;
-        this.name = name;
-    }
+
+
 
     public Long getId() {
         return id;

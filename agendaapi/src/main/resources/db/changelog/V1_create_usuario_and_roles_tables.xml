@@ -4,36 +4,29 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.15.xsd">
 
+    <!-- Primeiro cria a tabela role -->
+    <changeSet id="2-create-role-table" author="Gabriel">
+        <sql>
+            CREATE TABLE role (
+            id BIGINT AUTO_INCREMENT PRIMARY KEY,
+            name VARCHAR(100) NOT NULL UNIQUE
+            );
+        </sql>
+    </changeSet>
+
+    <!-- Depois cria a tabela usuario -->
     <changeSet id="1-create-usuario-table" author="Gabriel">
         <sql>
             CREATE TABLE usuario (
             id BIGINT AUTO_INCREMENT PRIMARY KEY,
             nome VARCHAR(100) NOT NULL,
             email VARCHAR(150) NOT NULL UNIQUE,
-            password VARCHAR(100) NOT NULL, -- Atualizado para refletir a mudança na entidade
-            criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL
+            password VARCHAR(100) NOT NULL,
+            criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+            role_id BIGINT NOT NULL, -- Chave estrangeira para a role
+            CONSTRAINT fk_role FOREIGN KEY (role_id) REFERENCES role(id) ON DELETE CASCADE
             );
         </sql>
     </changeSet>
 
-    <changeSet id="2-create-role-table" author="Gabriel">
-        <sql>
-            CREATE TABLE role (
-            id BIGINT AUTO_INCREMENT PRIMARY KEY,
-            nome VARCHAR(100) NOT NULL
-            );
-        </sql>
-    </changeSet>
-
-    <changeSet id="3-create-users-roles-table" author="Gabriel">
-        <sql>
-            CREATE TABLE users_roles (
-            user_id BIGINT NOT NULL,
-            role_id BIGINT NOT NULL,
-            PRIMARY KEY (user_id, role_id),
-            CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES usuario (id) ON DELETE CASCADE,
-            CONSTRAINT fk_role FOREIGN KEY (role_id) REFERENCES role (id) ON DELETE CASCADE
-            );
-        </sql>
-    </changeSet>
 </databaseChangeLog>

@@ -4,7 +4,9 @@ import com.agendaapi.agendaapi.dto.CreateUserDto;
 import com.agendaapi.agendaapi.dto.LoginUserDto;
 import com.agendaapi.agendaapi.dto.RecoveryJwtTokenDto;
 import com.agendaapi.agendaapi.model.Role;
+import com.agendaapi.agendaapi.model.RoleName;
 import com.agendaapi.agendaapi.model.Usuario;
+import com.agendaapi.agendaapi.repository.RoleRepository;
 import com.agendaapi.agendaapi.repository.UsuarioRepository;
 import com.agendaapi.agendaapi.security.JwtTokenService;
 import com.agendaapi.agendaapi.security.SecurityConfiguration;
@@ -15,7 +17,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 
 @Service
 public class UserService {
@@ -24,15 +27,18 @@ public class UserService {
     private AuthenticationManager authenticationManager;
 
     @Autowired
+    private RoleRepository roleRepository;
+
+    @Autowired
     private JwtTokenService jwtTokenService;
 
     @Autowired
-    private UsuarioRepository userRepository;
+    private UsuarioRepository usuarioRepository;
 
     @Autowired
     private SecurityConfiguration securityConfiguration;
 
-    // Método responsável por autenticar um usuário e retornar um token JWT
+    // Metodo responsável por autenticar um usuário e retornar um token JWT
     public RecoveryJwtTokenDto authenticateUser(LoginUserDto loginUserDto) {
         // Cria um objeto de autenticação com o email e a senha do usuário
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
@@ -48,17 +54,23 @@ public class UserService {
         return new RecoveryJwtTokenDto(jwtTokenService.generateToken(userDetails));
     }
 
-    // Método responsável por criar um usuário
     public void createUser(CreateUserDto createUserDto) {
-        Role role = new Role(createUserDto.role().name());
-        // Cria um novo usuário com os dados fornecidos
+        // Verifica qual Role deve ser associada ao usuário
+
+        Role role = roleRepository.findByName(createUserDto.role())
+                .orElseThrow(() -> new RuntimeException("Role não encontrada"));
+
+        // Cria um novo usuário com os dados fornecidos e a role associada
         Usuario newUser = new Usuario(
+                createUserDto.nome(),
                 createUserDto.email(),
                 securityConfiguration.passwordEncoder().encode(createUserDto.password()),
-                List.of(role)
+                role // Aqui associamos a role com o ID correto
         );
 
+        newUser.setCriadoEm(ZonedDateTime.now(ZoneId.of("America/Sao_Paulo")));
+
         // Salva o novo usuário no banco de dados
-        userRepository.save(newUser);
+        usuarioRepository.save(newUser);
     }
 }
