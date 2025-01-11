@@ -1,10 +1,10 @@
 package com.agendaapi.agendaapi.controller;
 
-import com.agendaapi.agendaapi.dto.usuariodto.UpdateEmailDto;
 import com.agendaapi.agendaapi.dto.usuariodto.UserDto;
 import com.agendaapi.agendaapi.dto.usuariodto.LoginUserDto;
 import com.agendaapi.agendaapi.dto.usuariodto.RecoveryJwtTokenDto;
-import com.agendaapi.agendaapi.service.UserService;
+import com.agendaapi.agendaapi.model.Usuario;
+import com.agendaapi.agendaapi.service.UsuarioService;
 import jakarta.validation.Valid; // Importa a anotação @Valid
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
@@ -16,11 +16,11 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/v1/agenda")
 public class UsuarioController {
 
     @Autowired
-    private UserService userService;
+    private UsuarioService usuarioService;
 
     @PostMapping("/login")
     public ResponseEntity<?> authenticateUser(
@@ -34,11 +34,11 @@ public class UsuarioController {
                     .toList();
             return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
         }
-        RecoveryJwtTokenDto token = userService.authenticateUser(loginUserDto);
+        RecoveryJwtTokenDto token = usuarioService.authenticateUser(loginUserDto);
         return new ResponseEntity<>(token, HttpStatus.OK);
     }
 
-    @PostMapping("/create")
+    @PostMapping("/createuser")
     public ResponseEntity<?> createUser(
             @Valid @RequestBody UserDto userDto, // Aplica validação no DTO
             BindingResult bindingResult) {
@@ -50,41 +50,42 @@ public class UsuarioController {
                     .toList();
             return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
         }
-        userService.createUser(userDto);
+        usuarioService.createUser(userDto);
         return new ResponseEntity<>("Usuario criado com sucesso!", HttpStatus.CREATED);
     }
 
     @PutMapping("/config/update")
     public ResponseEntity<?> updateUser(
-            @Valid @RequestBody UserDto userDto, // Aplica validação no DTO
+            // Recebe o token no cabeçalho
+            @RequestHeader("Authorization") String authorizationHeader,
+            @Valid @RequestBody UserDto userDto,
+            // Aplica validação no DTO
             BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             // Retorna erro 400 com detalhes dos erros de validação
             List<String> errors = bindingResult.getAllErrors()
                     .stream()
-                    .map(error -> error.getDefaultMessage())
+                    .map(DefaultMessageSourceResolvable::getDefaultMessage)
                     .toList();
             return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
         }
-        userService.updateUser(userDto);
+        Usuario userSignedIn = usuarioService.getContatoByToken(authorizationHeader);
+        usuarioService.updateUser(userDto,userSignedIn);
         return new ResponseEntity<>("Usuario alterado com sucesso!", HttpStatus.OK);
     }
 
-    @PutMapping("/config/update/email")
-    public ResponseEntity<?> updateEmail(
-            @Valid @RequestBody UpdateEmailDto updateEmailDto, // Aplica validação no DTO
-            BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            // Retorna erro 400 com detalhes dos erros de validação
-            List<String> errors = bindingResult.getAllErrors()
-                    .stream()
-                    .map(error -> error.getDefaultMessage())
-                    .toList();
-            return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
-        }
-        RecoveryJwtTokenDto newToken = userService.updateEmail(updateEmailDto);
-        return new ResponseEntity<>(newToken, HttpStatus.OK);
+    @PutMapping("/config/delete")
+    public ResponseEntity<?> deleteUser(
+            // Recebe o token no cabeçalho
+            @RequestHeader("Authorization") String authorizationHeader
+    ) {
+
+        Usuario userSignedIn = usuarioService.getContatoByToken(authorizationHeader);
+        usuarioService.deleteUser(userSignedIn);
+        return new ResponseEntity<>("Usuario deletado com sucesso!", HttpStatus.OK);
     }
+
+
 
     @GetMapping("/test/customer")
     public ResponseEntity<String> getCustomerAuthenticationTest() {
@@ -95,4 +96,7 @@ public class UsuarioController {
     public ResponseEntity<String> getAdminAuthenticationTest() {
         return new ResponseEntity<>("Administrador autenticado com sucesso.", HttpStatus.OK);
     }
+
+
+
 }

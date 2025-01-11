@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Builder;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 @Entity
 @Builder
@@ -56,5 +57,18 @@ public class Contato {
 
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Contato contato = (Contato) o;
+        return Objects.equals(id, contato.id) && Objects.equals(nome, contato.nome) && Objects.equals(dataNascimento, contato.dataNascimento) && Objects.equals(usuario, contato.usuario);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, nome, dataNascimento, usuario);
     }
 }

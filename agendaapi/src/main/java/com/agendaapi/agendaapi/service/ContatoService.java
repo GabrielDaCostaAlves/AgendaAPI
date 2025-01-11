@@ -16,6 +16,7 @@ import com.agendaapi.agendaapi.security.JwtTokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 
 
 @Service
@@ -36,19 +37,15 @@ public class ContatoService {
     @Autowired
     private JwtTokenService jwtTokenService; // Serviço para lidar com JWT
 
-    public void createContato(String token, ContatoDto contatoDto) {
-        // Decodificar o token e extrair o email do usuário
-        String email = jwtTokenService.getSubjectFromToken(token);
+    // Criar e preencher o contato (telefone e endereço se incluido)
+    public void createContato(Usuario userSignedIn, ContatoDto contatoDto) {
 
-        // Buscar o usuário no banco de dados
-        Usuario usuario = usuarioRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
         // Criar e preencher o contato
         Contato contato = new Contato();
         contato.setNome(contatoDto.nome());
         contato.setDataNascimento(contatoDto.dataDeNascimento());
-        contato.setUsuario(usuario); // Associar o contato ao usuário encontrado
+        contato.setUsuario(userSignedIn); // Associar o contato ao usuário encontrado
 
         // Salvar o contato no banco de dados
         Contato savedContato = contatoRepository.save(contato);
@@ -64,8 +61,13 @@ public class ContatoService {
             endereco.setCidade(enderecoDto.cidade());
             endereco.setEstado(enderecoDto.estado());
             endereco.setCep(enderecoDto.cep());
-            endereco.setContato(savedContato); // Associar o endereço ao contato
-            enderecoRepository.save(endereco);
+            endereco.setContato(savedContato);
+            // Associar o endereço ao contato
+            try {
+                enderecoRepository.save(endereco);
+            } catch (RuntimeException e) {
+                throw new RuntimeException("Erro ao criar telefone, codigo: " + e);
+            }
         }
 
         // Se um telefone foi fornecido no DTO, salvá-lo
@@ -74,54 +76,62 @@ public class ContatoService {
             Telefone telefone = new Telefone();
             telefone.setNumero(telefoneDto.numero());
             telefone.setTipo(telefoneDto.tipo());
-            telefone.setContato(savedContato); // Associar o telefone ao contato
-            telefoneRepository.save(telefone);
+            telefone.setContato(savedContato);
+            // Associar o telefone ao contato
+            try {
+                telefoneRepository.save(telefone);
+            } catch (RuntimeException e) {
+                throw new RuntimeException("Erro ao criar telefone, codigo: " + e);
+            }
         }
 
 
     }
 
-    public Contato updateContato(String token, Long contatoId, ContatoDto contatoDto) {
-        // Decodificar o token e extrair o email do usuário
-        String email = jwtTokenService.getSubjectFromToken(token); // O email do usuário do token
+    public Contato updateContato(Usuario userSignedIn, Long contatoId, ContatoDto contatoDto) {
 
-        // Buscar o usuário no banco de dados
-        Usuario usuario = usuarioRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
         // Buscar o contato para o usuário autenticado
-        Contato contato = contatoRepository.findById(contatoId)
-                .filter(c -> c.getUsuario().getEmail().equals(email))
-                .orElseThrow(() -> new RuntimeException("Contato não encontrado ou não pertence ao usuário"));
+        Contato contato = getContatoById(userSignedIn, contatoId);
 
         // Atualizar as informações do contato
         contato.setNome(contatoDto.nome());
         contato.setDataNascimento(contatoDto.dataDeNascimento());
 
         // Salvar o contato atualizado
-        return contatoRepository.save(contato);
+        try {
+            return contatoRepository.save(contato);
+        } catch (RuntimeException e) {
+            throw new RuntimeException("Erro ao atualizar usuario, codigo: " + e);
+        }
     }
 
-    public Contato getContatoById(String token, Long contatoId) {
-        // Decodificar o token e extrair o email do usuário
-        String email = jwtTokenService.getSubjectFromToken(token); // O email do usuário do token
-
+    public Contato getContatoById(Usuario userSignedIn, Long contatoId) {
         // Buscar o contato pelo ID, garantindo que pertence ao usuário autenticado
         return contatoRepository.findById(contatoId)
-                .filter(c -> c.getUsuario().getEmail().equals(email))
+                .filter(c -> c.getUsuario().getEmail().equals(userSignedIn.getEmail()))
                 .orElseThrow(() -> new RuntimeException("Contato não encontrado ou não pertence ao usuário"));
     }
 
-    public void deleteContato(String token, Long contatoId) {
-        // Decodificar o token e extrair o email do usuário
-        String email = jwtTokenService.getSubjectFromToken(token); // O email do usuário do token
-
+    public void deleteContato(Usuario userSignedIn, Long contatoId) {
         // Buscar o contato para o usuário autenticado
-        Contato contato = contatoRepository.findById(contatoId)
-                .filter(c -> c.getUsuario().getEmail().equals(email))
-                .orElseThrow(() -> new RuntimeException("Contato não encontrado ou não pertence ao usuário"));
+        Contato contato = getContatoById(userSignedIn, contatoId);
+        // Buscar o contato para o usuário autenticado
 
         // Deletar o contato
-        contatoRepository.delete(contato);
+        try {
+            contatoRepository.delete(contato);
+        } catch (RuntimeException e) {
+            throw new RuntimeException("Erro ao deletar usuario, codigo: " + e);
+        }
+
     }
+
+
+    //todo: Retorna todos contatos do usuario.
+    public List<Contato> getAllContatos(Usuario userSignedIn) {
+        return null;
+    }
+
+
 }

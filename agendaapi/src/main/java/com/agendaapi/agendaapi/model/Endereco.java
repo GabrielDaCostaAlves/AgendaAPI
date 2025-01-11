@@ -2,6 +2,8 @@ package com.agendaapi.agendaapi.model;
 
 import jakarta.persistence.*;
 
+import java.util.Objects;
+
 @Entity
 public class Endereco {
 
@@ -93,5 +95,18 @@ public class Endereco {
 
     public void setContato(Contato contato) {
         this.contato = contato;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Endereco endereco = (Endereco) o;
+        return Objects.equals(id, endereco.id) && Objects.equals(logradouro, endereco.logradouro) && Objects.equals(numero, endereco.numero) && Objects.equals(complemento, endereco.complemento) && Objects.equals(bairro, endereco.bairro) && Objects.equals(cidade, endereco.cidade) && Objects.equals(estado, endereco.estado) && Objects.equals(cep, endereco.cep) && Objects.equals(contato, endereco.contato);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, logradouro, numero, complemento, bairro, cidade, estado, cep, contato);
     }
 }
