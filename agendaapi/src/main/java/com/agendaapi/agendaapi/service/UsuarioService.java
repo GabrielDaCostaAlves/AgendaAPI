@@ -71,9 +71,11 @@ public class UsuarioService {
         // Salva o novo usuário no banco de dados
         try{
         usuarioRepository.save(newUser);
-        } catch (RuntimeException e) {
+                } catch (RuntimeException e) {
             throw new RuntimeException("Ocorreu um erro ao tentar criar o usuario, erro: " +e);
         }
+
+
     }
 
 

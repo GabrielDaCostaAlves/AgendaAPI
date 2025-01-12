@@ -70,6 +70,6 @@ public class EnderecoController {
 
         return ResponseEntity.ok(response);
     }
-
-    //todo: Criar endpoit para listar endereços do contato.
+    //todo: Criar endpoit get para endereço do contato.
+    //todo: Criar endpoit get para listar endereços do contato.
 }

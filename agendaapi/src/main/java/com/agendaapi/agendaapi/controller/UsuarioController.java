@@ -74,7 +74,8 @@ public class UsuarioController {
         return new ResponseEntity<>("Usuario alterado com sucesso!", HttpStatus.OK);
     }
 
-    @PutMapping("/config/delete")
+
+    @DeleteMapping("/config/delete")
     public ResponseEntity<?> deleteUser(
             // Recebe o token no cabeçalho
             @RequestHeader("Authorization") String authorizationHeader

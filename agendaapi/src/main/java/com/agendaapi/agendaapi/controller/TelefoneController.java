@@ -63,14 +63,14 @@ public class TelefoneController {
 
         // Chama o serviço para atualizar o telefone com o token
         boolean result = telefoneService.deleteTelefone(userSignedIn, telefoneId);
-        if (result){
+        if (result) {
             response = "Telefone deletado com sucesso!";
-        }else {
+        } else {
             response = "Erro ao tentar deletar!";
         }
 
         return ResponseEntity.ok(response);
     }
-
-    //todo: Endpoit para baixar lista de telefones do contato.
+    //todo: Endpoit get para baixar telefone do contato.
+    //todo: Endpoit get para baixar lista de telefones do contato.
 }

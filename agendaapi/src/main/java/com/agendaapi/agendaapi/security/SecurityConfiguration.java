@@ -23,9 +23,17 @@ public class SecurityConfiguration {
     private UserAuthenticationFilter userAuthenticationFilter;
 
 
-    public static final String [] ENDPOINTS_WITH_AUTHENTICATION_NOT_REQUIRED = {
-            "/users/login", // Url que usaremos para fazer login
-            "/users/create" // Url que usaremos para criar um usuário
+    public static final String[] ENDPOINTS_WITH_AUTHENTICATION_NOT_REQUIRED = {
+            "/swagger-ui/**",           // Padrão para o Swagger UI
+            "/swagger-ui.html",         // Página inicial do Swagger UI
+            "/v3/api-docs/**",          // Esquemas da API
+            "/swagger-resources/**",    // Recursos do Swagger
+            "/webjars/**",              // Arquivos estáticos do Swagger (JS, CSS)
+            "/users/login",             // Login
+            "/users/create",            // Criação de usuários
+            "/swagger-ui/index.html",
+
+            "/", "/swagger**/**", "/webjars/**", "/v3/**", "/error**"
     };
 
     // Endpoints que requerem autenticação para serem acessados
