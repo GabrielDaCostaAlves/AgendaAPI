@@ -10,4 +10,9 @@
 
     <!-- Inclui o arquivo V2 para inserir as roles -->
     <include file="classpath:db/changelog/V2_insert_roles.xml" />
+
+
+    <!-- Inclui o arquivo V2 para criar as tabelas 'contato', 'telefone' e 'endereço' -->
+    <include file="classpath:db/changelog/V2_create_contato_telefone_endereco.xml" />
+
 </databaseChangeLog>

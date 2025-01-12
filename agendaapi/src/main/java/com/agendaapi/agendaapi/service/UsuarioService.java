@@ -1,9 +1,8 @@
 package com.agendaapi.agendaapi.service;
 
-import com.agendaapi.agendaapi.dto.UpdateEmailDto;
-import com.agendaapi.agendaapi.dto.UserDto;
-import com.agendaapi.agendaapi.dto.LoginUserDto;
-import com.agendaapi.agendaapi.dto.RecoveryJwtTokenDto;
+import com.agendaapi.agendaapi.dto.usuariodto.UserDto;
+import com.agendaapi.agendaapi.dto.usuariodto.LoginUserDto;
+import com.agendaapi.agendaapi.dto.usuariodto.RecoveryJwtTokenDto;
 import com.agendaapi.agendaapi.model.Role;
 import com.agendaapi.agendaapi.model.Usuario;
 import com.agendaapi.agendaapi.repository.RoleRepository;
@@ -21,7 +20,7 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
 @Service
-public class UserService {
+public class UsuarioService {
 
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -41,8 +40,7 @@ public class UserService {
     // Metodo responsável por autenticar um usuário e retornar um token JWT
     public RecoveryJwtTokenDto authenticateUser(LoginUserDto loginUserDto) {
         // Cria um objeto de autenticação com o email e a senha do usuário
-        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
-                new UsernamePasswordAuthenticationToken(loginUserDto.email(), loginUserDto.password());
+        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(loginUserDto.email(), loginUserDto.password());
 
         // Autentica o usuário com as credenciais fornecidas
         Authentication authentication = authenticationManager.authenticate(usernamePasswordAuthenticationToken);
@@ -56,34 +54,39 @@ public class UserService {
 
     public void createUser(UserDto userDto) {
         // Verifica qual Role deve ser associada ao usuário
+        if (userDto==null) {
+            throw new IllegalArgumentException("Usuário, ID do contato ou Json não podem ser nulos");
+        }
 
         Role role = roleRepository.findByName(userDto.role())
                 .orElseThrow(() -> new RuntimeException("Role não encontrada"));
 
         // Cria um novo usuário com os dados fornecidos e a role associada
-        Usuario newUser = new Usuario(
-                userDto.nome(),
-                userDto.email(),
-                securityConfiguration.passwordEncoder().encode(userDto.password()),
-                role // Aqui associamos a role com o ID correto
+        Usuario newUser = new Usuario(userDto.nome(), userDto.email(), securityConfiguration
+                .passwordEncoder().encode(userDto.password()), role // Aqui associamos a role com o ID correto
         );
 
         newUser.setCriadoEm(ZonedDateTime.now(ZoneId.of("America/Sao_Paulo")));
 
         // Salva o novo usuário no banco de dados
+        try{
         usuarioRepository.save(newUser);
+                } catch (RuntimeException e) {
+            throw new RuntimeException("Ocorreu um erro ao tentar criar o usuario, erro: " +e);
+        }
+
+
     }
 
 
-    public void updateUser(UserDto updateUserDto){
+    public void updateUser(UserDto updateUserDto, Usuario userSignedIn) {
 
 
-        Usuario existingUser = usuarioRepository.findByEmail(updateUserDto.email())
-                .orElseThrow(()-> new RuntimeException("Usuario não encontrado"));
+        Usuario existingUser = usuarioRepository.findByEmail(userSignedIn.getEmail())
+                .orElseThrow(() -> new RuntimeException("Usuario não encontrado"));
 
 
-
-        // Atualize as informações do usuário
+        // Atualiza as informações do usuário
         if (updateUserDto.nome() != null) {
             existingUser.setNome(updateUserDto.nome());
         }
@@ -94,37 +97,45 @@ public class UserService {
             existingUser.setPassword(securityConfiguration.passwordEncoder().encode(updateUserDto.password()));
         }
         if (updateUserDto.role() != null) {
-            Role role = roleRepository.findByName(updateUserDto.role())
-                    .orElseThrow(() -> new RuntimeException("Role não encontrada"));
+            Role role = roleRepository.findByName(updateUserDto.role()).orElseThrow(() -> new RuntimeException("Role não encontrada"));
             existingUser.setRole(role);
         }
 
-        // Salva o novo usuário no banco de dados
-        usuarioRepository.save(existingUser);
+        try {
+            // Salva o novo usuário no banco de dados
+            usuarioRepository.save(existingUser);
+        } catch (RuntimeException e) {
+            throw new RuntimeException("Ocorreu um erro ao tentar atualizar o usuario, erro: " +e);
+        }
     }
 
 
-    public RecoveryJwtTokenDto updateEmail(UpdateEmailDto updateEmailDto) {
 
-        // Busca o usuário pelo e-mail atual
-        Usuario existingUser = usuarioRepository.findByEmail(updateEmailDto.email())
-                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
-        // Atualiza o e-mail, se for fornecido
-        if (updateEmailDto.newemail() != null) {
-            existingUser.setEmail(updateEmailDto.newemail());
+    public Usuario getContatoByToken(String token) {
+        // Remover "Bearer " do token
+        String tokenAbstract = token.replace("Bearer ", "");
+        // Decodificar o token e extrair o email do usuário
+        String email = jwtTokenService.getSubjectFromToken(tokenAbstract);
+
+
+        // Buscar o usuário no banco de dados
+        return usuarioRepository.findByEmail(email).orElseThrow(() ->
+                new RuntimeException("Usuário não encontrado"));
+
+    }
+
+    public void deleteUser(Usuario userSignedIn) {
+
+        try {
+            usuarioRepository.delete(userSignedIn);
+        } catch (RuntimeException e) {
+            throw new RuntimeException("Ocorreu um erro ao tentar deletar o usuario, erro: " +e);
         }
 
-        // Salva o usuário com o novo e-mail
-        usuarioRepository.save(existingUser);
 
-        // Cria um UserDetailsImpl atualizado com o novo e-mail
-        UserDetailsImpl userDetails = new UserDetailsImpl(existingUser);
-
-        // Gera um novo token JWT com o e-mail atualizado
-        String newJwtToken = jwtTokenService.generateToken(userDetails);
-
-        // Retorna o novo token no DTO
-        return new RecoveryJwtTokenDto(newJwtToken);
     }
+
+
+
 }

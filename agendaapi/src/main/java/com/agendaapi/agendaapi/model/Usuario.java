@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Builder;
 
 import java.time.ZonedDateTime;
+import java.util.Objects;
 
 @Entity
 @Builder
@@ -86,5 +87,18 @@ public class Usuario {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Usuario usuario = (Usuario) o;
+        return Objects.equals(id, usuario.id) && Objects.equals(nome, usuario.nome) && Objects.equals(email, usuario.email) && Objects.equals(password, usuario.password) && Objects.equals(criadoEm, usuario.criadoEm) && Objects.equals(role, usuario.role);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, nome, email, password, criadoEm, role);
     }
 }

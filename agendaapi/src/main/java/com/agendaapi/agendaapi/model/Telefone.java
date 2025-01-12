@@ -1,0 +1,69 @@
+package com.agendaapi.agendaapi.model;
+
+import jakarta.persistence.*;
+
+import java.util.Objects;
+
+@Entity
+public class Telefone {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String numero;
+
+    private String tipo; // Ex: Celular, Residencial, Comercial
+
+    // Relacionamento muitos para um (um telefone pertence a um contato)
+    @ManyToOne(fetch = FetchType.LAZY)  // Usando LAZY para carregar o contato somente quando necessário
+    @JoinColumn(name = "contato_id", nullable = false)  // Chave estrangeira para o contato
+    private Contato contato;
+
+    // Getters e Setters
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getNumero() {
+        return numero;
+    }
+
+    public void setNumero(String numero) {
+        this.numero = numero;
+    }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
+
+    public Contato getContato() {
+        return contato;
+    }
+
+    public void setContato(Contato contato) {
+        this.contato = contato;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Telefone telefone = (Telefone) o;
+        return Objects.equals(id, telefone.id) && Objects.equals(numero, telefone.numero) && Objects.equals(tipo, telefone.tipo) && Objects.equals(contato, telefone.contato);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, numero, tipo, contato);
+    }
+}
