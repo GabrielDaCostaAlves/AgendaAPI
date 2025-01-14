@@ -29,8 +29,10 @@ public class SecurityConfiguration {
             "/v3/api-docs/**",          // Esquemas da API
             "/swagger-resources/**",    // Recursos do Swagger
             "/webjars/**",              // Arquivos estáticos do Swagger (JS, CSS)
-            "/users/login",             // Login
-            "/users/create",            // Criação de usuários
+            "/v1/agenda/login",             // Login
+            "/v1/agenda/create",            // Criação de usuários
+            "/v1/agenda/config/update",    //Atualização do usuario
+            "/v1/agenda/config/delete",     //Delete do usuario
             "/swagger-ui/index.html",
 
             "/", "/swagger**/**", "/webjars/**", "/v3/**", "/error**"
