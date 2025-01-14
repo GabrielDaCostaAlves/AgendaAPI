@@ -84,7 +84,7 @@ public class ContatoService {
                 throw new RuntimeException("Erro ao criar telefone, codigo: " + e);
             }
         }
-
+        return savedContato;
 
     }
 
