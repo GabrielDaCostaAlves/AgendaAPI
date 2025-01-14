@@ -38,7 +38,7 @@ public class ContatoService {
     private JwtTokenService jwtTokenService; // Serviço para lidar com JWT
 
     // Criar e preencher o contato (telefone e endereço se incluido)
-    public void createContato(Usuario userSignedIn, ContatoDto contatoDto) {
+    public Contato createContato(Usuario userSignedIn, ContatoDto contatoDto) {
 
 
         // Criar e preencher o contato

@@ -1,8 +1,6 @@
 package com.agendaapi.agendaapi.vo;
 
-import org.springframework.stereotype.Component;
 
-@Component
 public class EnderecoVO {
 
     private String logradouro; // Ex: Rua, Avenida, etc.

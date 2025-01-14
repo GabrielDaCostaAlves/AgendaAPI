@@ -46,13 +46,11 @@ public class UsuarioController {
     public ResponseEntity<UsuarioVO> createUser(@Valid @RequestBody UsuarioDto usuarioDto) throws IllegalAccessException, InstantiationException, InvocationTargetException, NoSuchMethodException, NoSuchFieldException {
         // Chama o serviço para criar o usuário
         Usuario usuario = usuarioService.createUser(usuarioDto);
-        UsuarioVO usuarioVO = ConverterClass.convert(usuario,UsuarioVO.class);
+        UsuarioVO usuarioVO = ConverterClass.convert(usuario, UsuarioVO.class);
 
         // Retorna 201 (Created) com o objeto criado
         return ResponseEntity.status(HttpStatus.CREATED).body(usuarioVO);
     }
-
-
 
 
     @PutMapping("/config/update")
@@ -62,7 +60,7 @@ public class UsuarioController {
             @Valid @RequestBody UsuarioDto usuarioDto) throws IllegalAccessException, InstantiationException, InvocationTargetException, NoSuchMethodException, NoSuchFieldException {
 
         Usuario userSignedIn = usuarioService.getContatoByToken(authorizationHeader);
-        Usuario usuario= usuarioService.updateUser(usuarioDto,userSignedIn);
+        Usuario usuario = usuarioService.updateUser(usuarioDto, userSignedIn);
 
         UsuarioVO usuarioVO = ConverterClass.convert(usuario, UsuarioVO.class);
         return ResponseEntity.ok(usuarioVO);
@@ -79,11 +77,4 @@ public class UsuarioController {
         usuarioService.deleteUser(userSignedIn);
         return new ResponseEntity<>("Usuario deletado com sucesso!", HttpStatus.OK);
     }
-
-
-
-
-
-
-
 }

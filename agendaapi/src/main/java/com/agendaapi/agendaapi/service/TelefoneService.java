@@ -60,12 +60,9 @@ public class TelefoneService {
             throw new IllegalArgumentException("Usuário, ID do telefone ou Json não podem ser nulos");
         }
 
-
-
         // Buscar o telefone no banco de dados
         Telefone telefone = telefoneRepository.findById(telefoneId)
                 .orElseThrow(() -> new RuntimeException("Telefone não encontrado"));
-
 
         if (Objects.equals(telefone.getContato().getUsuario().getEmail(), userSignedIn.getEmail())) {
 
@@ -84,7 +81,7 @@ public class TelefoneService {
         return null;
     }
 
-    public boolean deleteTelefone(Usuario userSignedIn, Long telefoneId) {
+    public void deleteTelefone(Usuario userSignedIn, Long telefoneId) {
         if (userSignedIn == null || telefoneId == null) {
             throw new IllegalArgumentException("Usuário ou ID do telefone não podem ser nulos");
         }
@@ -99,9 +96,9 @@ public class TelefoneService {
             telefoneRepository.delete(telefone);
 
 
-            return true;
+
         }
-        return false;
+
     }
 
 

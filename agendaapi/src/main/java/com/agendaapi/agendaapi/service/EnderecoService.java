@@ -90,7 +90,7 @@ public class EnderecoService {
         return null;
     }
 
-    public boolean deleteEndereco(Usuario userSignidIn, Long enderecoId) {
+    public void deleteEndereco(Usuario userSignidIn, Long enderecoId) {
 
         if (userSignidIn == null || enderecoId == null) {
             throw new IllegalArgumentException("Usuário, ID do endereço não podem ser nulos");
@@ -106,12 +106,12 @@ public class EnderecoService {
             try {
                 // Deleta o endereco atualizado no banco de dados
                 enderecoRepository.delete(endereco);
-                return true;
+
             } catch (RuntimeException e) {
                 throw new RuntimeException("Ocorreu um erro ao tentar deletar o endereco, erro: " + e);
             }
         }
-        return false;
+
     }
 
 
