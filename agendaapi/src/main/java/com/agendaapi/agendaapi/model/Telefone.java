@@ -15,12 +15,10 @@ public class Telefone {
 
     private String tipo; // Ex: Celular, Residencial, Comercial
 
-    // Relacionamento muitos para um (um telefone pertence a um contato)
-    @ManyToOne(fetch = FetchType.LAZY)  // Usando LAZY para carregar o contato somente quando necessário
-    @JoinColumn(name = "contato_id", nullable = false)  // Chave estrangeira para o contato
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "contato_id", nullable = false)
     private Contato contato;
 
-    // Getters e Setters
 
     public Long getId() {
         return id;

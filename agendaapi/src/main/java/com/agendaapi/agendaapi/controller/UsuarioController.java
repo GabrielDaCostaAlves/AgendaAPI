@@ -7,6 +7,12 @@ import com.agendaapi.agendaapi.model.Usuario;
 import com.agendaapi.agendaapi.service.UsuarioService;
 import com.agendaapi.agendaapi.util.conversor.ConverterClass;
 import com.agendaapi.agendaapi.vo.UsuarioVO;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
@@ -20,42 +26,137 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/v1/agenda")
+@Tag(name = "Usuário", description = "Gerenciamento de usuários")
 public class UsuarioController {
 
     @Autowired
     private UsuarioService usuarioService;
 
-
+    @Operation(
+            summary = "Autenticar usuário",
+            description = "Realiza a autenticação de um usuário e retorna um token JWT.",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Autenticação realizada com sucesso",
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    examples = @ExampleObject(value = "{ \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c2VyMTIzIiwiZXhwIjoxNjc1ODgwMDAwfQ.abc123\" }")
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Dados inválidos fornecidos na requisição",
+                            content = @Content(mediaType = "application/json")
+                    )
+            }
+    )
     @PostMapping("/login")
     public ResponseEntity<?> authenticateUser(
-            @Valid @RequestBody LoginUserDto loginUserDto, // Aplica validação no DTO
-            BindingResult bindingResult) { // Recebe o resultado da validação
-        if (bindingResult.hasErrors()) {
-            // Retorna erro 400 com detalhes dos erros de validação
-            List<String> errors = bindingResult.getAllErrors()
-                    .stream()
-                    .map(DefaultMessageSourceResolvable::getDefaultMessage)
-                    .toList();
-            return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
-        }
+            @Valid @RequestBody LoginUserDto loginUserDto) {
+
         RecoveryJwtTokenDto token = usuarioService.authenticateUser(loginUserDto);
         return new ResponseEntity<>(token, HttpStatus.OK);
     }
 
+
+    @Operation(
+            summary = "Criar usuário",
+            description = "Recebe os dados de um usuário e o cadastra no sistema.",
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    description = "Dados necessários para criar um novo usuário",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = UsuarioVO.class),
+                            examples = @ExampleObject(
+                                    name = "Exemplo de entrada",
+                                    value = """
+                    {
+                        "nome": "Usuario de teste",
+                        "email": "teste.user@email.com",
+                        "criadoEm": "2025-01-24T15:30:00Z",
+                        "role": "ROLE_CUSTOMER"
+                    }
+                    """
+                            )
+                    )
+            ),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "201",
+                            description = "Usuário criado com sucesso",
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = UsuarioVO.class),
+                                    examples = @ExampleObject(
+                                            name = "Exemplo de resposta",
+                                            value = """
+                        {
+                            "nome": "Usuario de teste",
+                            "email": "teste.user@email.com",
+                            "criadoEm": "2025-01-24T15:30:00Z",
+                            "role": "ROLE_CUSTOMER"
+                        }
+                        """
+                                    )
+                            )
+                    )
+            }
+    )
     @PostMapping("/create")
     public ResponseEntity<UsuarioVO> createUser(@Valid @RequestBody UsuarioDto usuarioDto) throws IllegalAccessException, InstantiationException, InvocationTargetException, NoSuchMethodException, NoSuchFieldException {
-        // Chama o serviço para criar o usuário
         Usuario usuario = usuarioService.createUser(usuarioDto);
         UsuarioVO usuarioVO = ConverterClass.convert(usuario, UsuarioVO.class);
 
-        // Retorna 201 (Created) com o objeto criado
-        return ResponseEntity.status(HttpStatus.CREATED).body(usuarioVO);
+        return ResponseEntity.status(201).body(usuarioVO);
     }
 
-
+    @Operation(
+            summary = "Atualizar usuário",
+            description = "Atualiza os dados do usuário autenticado com base no token de autenticação e nos dados fornecidos no corpo da requisição.",
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    description = "Dados para atualizar o usuário",
+                    required = true,
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = UsuarioDto.class),
+                            examples = @ExampleObject(
+                                    name = "Exemplo de entrada",
+                                    value = """
+                        {
+                            "nome": "Usuario de teste",
+                            "email": "teste.atualizado@email.com",
+                            "criadoEm": "2025-01-24T15:30:00Z",
+                            "role": "ROLE_CUSTOMER"
+                        }
+                        """
+                            )
+                    )
+            ),
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Usuário atualizado com sucesso",
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = UsuarioVO.class),
+                                    examples = @ExampleObject(
+                                            name = "Exemplo de resposta",
+                                            value = """
+                            {
+                                "nome": "Usuario de teste",
+                                "email": "teste.atualizado@email.com",
+                                "criadoEm": "2025-01-24T15:30:00Z",
+                                "role": "ROLE_CUSTOMER"
+                            }
+                            """
+                                    )
+                            )
+                    )
+            }
+    )
     @PutMapping("/config/update")
     public ResponseEntity<UsuarioVO> updateUser(
-            // Recebe o token no cabeçalho
             @RequestHeader("Authorization") String authorizationHeader,
             @Valid @RequestBody UsuarioDto usuarioDto) throws IllegalAccessException, InstantiationException, InvocationTargetException, NoSuchMethodException, NoSuchFieldException {
 
@@ -66,10 +167,29 @@ public class UsuarioController {
         return ResponseEntity.ok(usuarioVO);
     }
 
-
+    @Operation(
+            summary = "Deletar usuário",
+            description = "Deleta o usuário autenticado com base no token de autenticação fornecido no cabeçalho.",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Usuário deletado com sucesso",
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    examples = @ExampleObject(
+                                            name = "Exemplo de resposta",
+                                            value = """
+                            {
+                                "message": "Usuário deletado com sucesso!"
+                            }
+                            """
+                                    )
+                            )
+                    )
+            }
+    )
     @DeleteMapping("/config/delete")
     public ResponseEntity<?> deleteUser(
-            // Recebe o token no cabeçalho
             @RequestHeader("Authorization") String authorizationHeader
     ) {
 

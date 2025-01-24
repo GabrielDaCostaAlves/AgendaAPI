@@ -12,9 +12,7 @@ public class LoginUserDto {
         @NotBlank(message = "A senha não pode ser vazia.")
         private String password;
 
-        public LoginUserDto() {
-                // Construtor padrão
-        }
+        public LoginUserDto() {}
 
         public LoginUserDto(String email, String password) {
                 this.email = email;

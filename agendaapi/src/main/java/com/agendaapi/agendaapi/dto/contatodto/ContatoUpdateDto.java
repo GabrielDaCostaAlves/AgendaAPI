@@ -6,19 +6,15 @@ import jakarta.validation.constraints.Past;
 
 import java.time.LocalDate;
 
-public record ContatoDto(
+public record ContatoUpdateDto(
 
         @NotNull(message = "O nome do contato não pode ser nulo.")
         String nome,
 
         @NotNull(message = "A data de nascimento não pode ser nula.")
         @Past(message = "A data de nascimento deve ser no passado.")
-        LocalDate dataDeNascimento,
+        LocalDate dataDeNascimento
 
-
-        TelefoneDto telefone,
-
-        EnderecoDto endereco
 
 ) {
 }

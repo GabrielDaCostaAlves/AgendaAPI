@@ -19,14 +19,14 @@ public class Contato {
     @Column(name = "data_nascimento")
     private LocalDate dataNascimento;
 
-    // Relacionamento muitos para um (um contato pertence a um usuário)
-    @ManyToOne(fetch = FetchType.LAZY)  // Definir como LAZY para carregar o usuário apenas quando necessário
-    @JoinColumn(name = "usuario_id", nullable = false)  // Chave estrangeira para o usuário
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "usuario_id", nullable = false)
     private Usuario usuario;
 
     public Contato(){}
 
-    // Getters e Setters
+
     public Long getId() {
         return id;
     }

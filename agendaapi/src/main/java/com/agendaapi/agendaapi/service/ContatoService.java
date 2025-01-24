@@ -2,6 +2,7 @@ package com.agendaapi.agendaapi.service;
 
 
 import com.agendaapi.agendaapi.dto.contatodto.ContatoDto;
+import com.agendaapi.agendaapi.dto.contatodto.ContatoUpdateDto;
 import com.agendaapi.agendaapi.dto.contatodto.EnderecoDto;
 import com.agendaapi.agendaapi.dto.contatodto.TelefoneDto;
 import com.agendaapi.agendaapi.model.Contato;
@@ -13,6 +14,7 @@ import com.agendaapi.agendaapi.repository.EnderecoRepository;
 import com.agendaapi.agendaapi.repository.TelefoneRepository;
 import com.agendaapi.agendaapi.repository.UsuarioRepository;
 import com.agendaapi.agendaapi.security.JwtTokenService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,16 +28,11 @@ public class ContatoService {
     private ContatoRepository contatoRepository;
 
     @Autowired
-    private UsuarioRepository usuarioRepository;
-
-    @Autowired
     private EnderecoRepository enderecoRepository;
 
     @Autowired
     private TelefoneRepository telefoneRepository;
 
-    @Autowired
-    private JwtTokenService jwtTokenService; // Serviço para lidar com JWT
 
     // Criar e preencher o contato (telefone e endereço se incluido)
     public Contato createContato(Usuario userSignedIn, ContatoDto contatoDto) {
@@ -88,7 +85,7 @@ public class ContatoService {
 
     }
 
-    public Contato updateContato(Usuario userSignedIn, Long contatoId, ContatoDto contatoDto) {
+    public Contato updateContato(Usuario userSignedIn, Long contatoId, ContatoUpdateDto contatoDto) {
 
 
         // Buscar o contato para o usuário autenticado

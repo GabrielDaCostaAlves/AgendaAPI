@@ -7,6 +7,7 @@ import com.agendaapi.agendaapi.model.Usuario;
 import com.agendaapi.agendaapi.repository.EnderecoRepository;
 import com.agendaapi.agendaapi.repository.ContatoRepository;
 import com.agendaapi.agendaapi.security.JwtTokenService;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,20 +23,20 @@ public class EnderecoService {
     private ContatoRepository contatoRepository;
 
     @Autowired
-    private JwtTokenService jwtTokenService; // Serviço para lidar com JWT
+    private JwtTokenService jwtTokenService;
 
     public Endereco createEndereco(Usuario userSignedIn, EnderecoDto enderecoDto, Long contatoId) {
 
         if (userSignedIn == null || contatoId == null || enderecoDto == null) {
             throw new IllegalArgumentException("Usuário, ID do contato ou Json não podem ser nulos");
         }
-        // Buscar o contato no banco de dados
+
         Contato contato = contatoRepository.findById(contatoId)
                 .orElseThrow(() -> new RuntimeException("Contato não encontrado"));
 
 
         if (Objects.equals(userSignedIn.getEmail(), contato.getUsuario().getEmail())) {
-            // Criar e preencher o endereço
+
 
             try {
                 Endereco endereco = new Endereco();
@@ -46,9 +47,9 @@ public class EnderecoService {
                 endereco.setCidade(enderecoDto.cidade());
                 endereco.setEstado(enderecoDto.estado());
                 endereco.setCep(enderecoDto.cep());
-                endereco.setContato(contato); // Associar o endereço ao contato
+                endereco.setContato(contato);
 
-                // Salvar o endereço no banco de dados
+
                 return enderecoRepository.save(endereco);
 
             } catch (RuntimeException e) {
@@ -63,7 +64,6 @@ public class EnderecoService {
         if (userSignedIn == null || enderecoId == null || enderecoDto == null) {
             throw new IllegalArgumentException("Usuário, ID do endereço ou Json não podem ser nulos");
         }
-        // Buscar o endereço no banco de dados
         Endereco endereco = enderecoRepository.findById(enderecoId)
                 .orElseThrow(() -> new RuntimeException("Endereço não encontrado"));
 
@@ -72,7 +72,6 @@ public class EnderecoService {
 
 
             try {
-                // Atualizar o endereço com os novos dados
                 endereco.setLogradouro(enderecoDto.logradouro());
                 endereco.setNumero(enderecoDto.numero());
                 endereco.setComplemento(enderecoDto.complemento());
@@ -81,7 +80,6 @@ public class EnderecoService {
                 endereco.setEstado(enderecoDto.estado());
                 endereco.setCep(enderecoDto.cep());
 
-                // Salvar o endereço atualizado no banco de dados
                 return enderecoRepository.save(endereco);
             } catch (RuntimeException e) {
                 throw new RuntimeException("Ocorreu um erro ao tentar atualizaro endereco, erro: " + e);
@@ -96,7 +94,6 @@ public class EnderecoService {
             throw new IllegalArgumentException("Usuário, ID do endereço não podem ser nulos");
         }
 
-        // Buscar o endereco no banco de dados
         Endereco endereco = enderecoRepository.findById(enderecoId)
                 .orElseThrow(() -> new RuntimeException("Telefone não encontrado"));
 
@@ -104,7 +101,6 @@ public class EnderecoService {
         if (Objects.equals(endereco.getContato().getUsuario().getEmail(), userSignidIn.getEmail())) {
 
             try {
-                // Deleta o endereco atualizado no banco de dados
                 enderecoRepository.delete(endereco);
 
             } catch (RuntimeException e) {
@@ -112,6 +108,16 @@ public class EnderecoService {
             }
         }
 
+    }
+    public Endereco getEnderecoById(Usuario userSignedIn, Long enderecoId) {
+        if (userSignedIn == null || enderecoId == null) {
+            throw new IllegalArgumentException("Usuário ou ID do endereço não podem ser nulos");
+        }
+
+
+        return enderecoRepository.findById(enderecoId)
+                .filter(e -> e.getContato().getUsuario().equals(userSignedIn))
+                .orElseThrow(() -> new EntityNotFoundException("Endereço não encontrado ou não pertence ao usuário"));
     }
 
 

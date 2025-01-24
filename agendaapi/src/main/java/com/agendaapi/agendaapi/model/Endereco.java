@@ -11,20 +11,20 @@ public class Endereco {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String logradouro; // Ex: Rua, Avenida, etc.
-    private String numero; // Número da casa/apartamento
-    private String complemento; // Ex: Apartamento, Bloco, Andar, etc.
-    private String bairro; // Bairro
-    private String cidade; // Cidade
-    private String estado; // Estado
-    private String cep; // Código postal
+    private String logradouro;
+    private String numero;
+    private String complemento;
+    private String bairro;
+    private String cidade;
+    private String estado;
+    private String cep;
 
-    // Relacionamento muitos para um (um endereço pertence a um contato)
-    @ManyToOne(fetch = FetchType.LAZY)  // Usando LAZY para carregar o contato somente quando necessário
-    @JoinColumn(name = "contato_id", nullable = false)  // Chave estrangeira para o contato
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "contato_id", nullable = false)
     private Contato contato;
 
-    // Getters e Setters
+
     public Long getId() {
         return id;
     }

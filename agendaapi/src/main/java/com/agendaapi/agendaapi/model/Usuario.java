@@ -1,5 +1,6 @@
 package com.agendaapi.agendaapi.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Builder;
 
@@ -19,15 +20,16 @@ public class Usuario {
     @Column(unique = true)
     private String email;
 
+    @JsonIgnore
     @Column(name = "password")
     private String password;
 
     @Column(name = "criado_em")
-    private ZonedDateTime criadoEm; // Campo para data de criação
+    private ZonedDateTime criadoEm;
 
-    // Relacionamento muitos para um (um usuário tem uma única role)
-    @ManyToOne(fetch = FetchType.EAGER) // EAGER se você quiser carregar a role junto ao usuário
-    @JoinColumn(name = "role_id", nullable = false) // Chave estrangeira para a role
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "role_id", nullable = false)
     private Role role;
 
     public Usuario() {

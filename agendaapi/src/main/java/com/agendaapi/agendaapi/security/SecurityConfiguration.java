@@ -24,33 +24,27 @@ public class SecurityConfiguration {
 
 
     public static final String[] ENDPOINTS_WITH_AUTHENTICATION_NOT_REQUIRED = {
-            "/swagger-ui/**",           // Padrão para o Swagger UI
-            "/swagger-ui.html",         // Página inicial do Swagger UI
-            "/v3/api-docs/**",          // Esquemas da API
-            "/swagger-resources/**",    // Recursos do Swagger
-            "/webjars/**",              // Arquivos estáticos do Swagger (JS, CSS)
-            "/v1/agenda/login",             // Login
-            "/v1/agenda/create",            // Criação de usuários
-            "/v1/agenda/config/update",    //Atualização do usuario
-            "/v1/agenda/config/delete",     //Delete do usuario
+            "/swagger-ui/**",
+            "/swagger-ui.html",
+            "/v3/api-docs/**",
+            "/swagger-resources/**",
+            "/webjars/**",
+            "/v1/agenda/login",
+            "/v1/agenda/create",
             "/swagger-ui/index.html",
-
             "/", "/swagger**/**", "/webjars/**", "/v3/**", "/error**"
     };
 
-    // Endpoints que requerem autenticação para serem acessados
-    public static final String [] ENDPOINTS_WITH_AUTHENTICATION_REQUIRED = {
-            "/users/config/update",
-            "/users/config/update/email",
-            "/users/createcontato",
-            "/users/{contatoId}/updatecontato",
-            "/users/{contatoId}/deletecontato",
-            "/users/{contatoId}/createendereco",
-            "/users/{contatoId}/updateendereco/{enderecoId}",
-            "/users/{contatoId}/deleteendereco/{enderecoId}",
-            "/users/{contatoId}/createtelefone",
-            "/users/{contatoId}/updatetelefone/{telefoneId}",
-            "/users/{contatoId}/deletetelefone/{telefoneId}"
+
+    public static final String[] ENDPOINTS_WITH_AUTHENTICATION_REQUIRED = {
+            "/v1/agenda/contatos/createcontato",
+            "/v1/agenda/contatos/{contatoId}",
+            "/v1/agenda/enderecos/{contatoId}",
+            "/v1/agenda/enderecos/{enderecoId}",
+            "/v1/agenda/telefones/{contatoId}",
+            "/v1/agenda/telefones/{telefoneId}",
+            "/v1/agenda/config/update",
+            "/v1/agenda/config/delete"
     };
 
 

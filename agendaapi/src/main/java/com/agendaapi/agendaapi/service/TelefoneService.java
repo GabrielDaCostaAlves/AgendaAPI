@@ -113,6 +113,8 @@ public class TelefoneService {
                 .orElseThrow(() -> new EntityNotFoundException("Telefone não encontrado ou não pertence ao usuário"));
     }
 
+
+
     //todo: metodo para retornar os telefones do contato.
 
 }
