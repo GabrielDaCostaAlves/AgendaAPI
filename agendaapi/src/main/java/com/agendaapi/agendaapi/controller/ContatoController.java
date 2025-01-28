@@ -2,8 +2,8 @@ package com.agendaapi.agendaapi.controller;
 
 import com.agendaapi.agendaapi.dto.contatodto.ContatoDto;
 import com.agendaapi.agendaapi.dto.contatodto.ContatoUpdateDto;
-import com.agendaapi.agendaapi.model.Contato;
-import com.agendaapi.agendaapi.model.Usuario;
+import com.agendaapi.agendaapi.model.entity.Contato;
+import com.agendaapi.agendaapi.model.entity.Usuario;
 import com.agendaapi.agendaapi.service.ContatoService;
 import com.agendaapi.agendaapi.service.UsuarioService;
 import com.agendaapi.agendaapi.util.conversor.ConverterClass;
@@ -17,6 +17,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -91,7 +92,7 @@ public class ContatoController {
                     )
             }
     )
-    @PostMapping("/createcontato")
+    @PostMapping
     public ResponseEntity<ContatoVO> createContato(
             @RequestHeader("Authorization") String authorizationHeader,
             @RequestBody @Valid ContatoDto contatoDto) throws NoSuchFieldException, InvocationTargetException, IllegalAccessException, InstantiationException, NoSuchMethodException {
@@ -275,5 +276,78 @@ public class ContatoController {
         return new ResponseEntity<>("Contato deletado com sucesso!", HttpStatus.OK);
     }
 
-    //todo: Endpoint para listar contatos do usuario.
+    @Operation(
+            summary = "Buscar todos os contatos do usuário",
+            description = "Retorna uma lista paginada de todos os contatos associados ao usuário autenticado.",
+            parameters = {
+                    @Parameter(
+                            name = "Authorization",
+                            description = "Token JWT do usuário autenticado. Deve ser enviado no cabeçalho da requisição.",
+                            in = ParameterIn.HEADER,
+                            required = true,
+                            schema = @Schema(type = "string")
+                    ),
+                    @Parameter(
+                            name = "page",
+                            description = "Número da página para a paginação (default: 0).",
+                            in = ParameterIn.QUERY,
+                            required = false,
+                            schema = @Schema(type = "integer", defaultValue = "0")
+                    ),
+                    @Parameter(
+                            name = "size",
+                            description = "Número de itens por página (default: 10).",
+                            in = ParameterIn.QUERY,
+                            required = false,
+                            schema = @Schema(type = "integer", defaultValue = "10")
+                    )
+            },
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Contatos encontrados com sucesso",
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = ContatoVO.class),
+                                    examples = @ExampleObject(
+                                            name = "Exemplo de resposta",
+                                            value = """
+                                                    [
+                                                        {
+                                                            "id": 1,
+                                                            "nome": "João Silva",
+                                                            "dataNascimento": "1980-05-15",
+                                                            "telefones": [
+                                                                {"numero": "011998877665", "tipo": "Celular"}
+                                                            ],
+                                                            "enderecos": [
+                                                                {"logradouro": "Rua A", "numero": "123", "bairro": "Centro", "cidade": "São Paulo", "estado": "SP", "cep": "01000-000"}
+                                                            ]
+                                                        },
+                                                        {
+                                                            "id": 2,
+                                                            "nome": "Maria Oliveira",
+                                                            "dataNascimento": "1990-08-20",
+                                                            "telefones": [
+                                                                {"numero": "011987654321", "tipo": "Residencial"}
+                                                            ],
+                                                            "enderecos": [
+                                                                {"logradouro": "Rua B", "numero": "456", "bairro": "Jardim", "cidade": "São Paulo", "estado": "SP", "cep": "02000-000"}
+                                                            ]
+                                                        }
+                                                    ]
+                                                    """
+                                    )
+                            )
+                    )
+            }
+    )
+    @GetMapping
+    public Page<ContatoVO> getAllContatos(
+            @RequestHeader("Authorization") String authorizationHeader,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        Usuario userSignedIn = usuarioService.getContatoByToken(authorizationHeader);
+        return contatoService.getAllContatos(userSignedIn, page, size);
+    }
 }

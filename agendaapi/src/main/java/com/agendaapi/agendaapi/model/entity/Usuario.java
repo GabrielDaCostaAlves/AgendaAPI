@@ -1,4 +1,4 @@
-package com.agendaapi.agendaapi.model;
+package com.agendaapi.agendaapi.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;

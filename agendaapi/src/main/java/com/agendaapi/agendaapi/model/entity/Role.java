@@ -1,6 +1,7 @@
-package com.agendaapi.agendaapi.model;
+package com.agendaapi.agendaapi.model.entity;
 
 
+import com.agendaapi.agendaapi.model.enums.RoleName;
 import jakarta.persistence.*;
 import lombok.Builder;
 

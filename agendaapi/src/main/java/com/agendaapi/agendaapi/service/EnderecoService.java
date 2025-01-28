@@ -1,14 +1,18 @@
 package com.agendaapi.agendaapi.service;
 
 import com.agendaapi.agendaapi.dto.contatodto.EnderecoDto;
-import com.agendaapi.agendaapi.model.Endereco;
-import com.agendaapi.agendaapi.model.Contato;
-import com.agendaapi.agendaapi.model.Usuario;
+import com.agendaapi.agendaapi.model.entity.Endereco;
+import com.agendaapi.agendaapi.model.entity.Contato;
+import com.agendaapi.agendaapi.model.entity.Usuario;
 import com.agendaapi.agendaapi.repository.EnderecoRepository;
 import com.agendaapi.agendaapi.repository.ContatoRepository;
 import com.agendaapi.agendaapi.security.JwtTokenService;
+import com.agendaapi.agendaapi.vo.EnderecoVO;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
@@ -121,5 +125,23 @@ public class EnderecoService {
     }
 
 
-    //todo: Criar metodo para retornar lista de endereços.
+    public Page<EnderecoVO> getEnderecosByContato(Long contatoId, Usuario userSignedIn, int page, int size) {
+        if (userSignedIn == null || contatoId == null) {
+            throw new IllegalArgumentException("Usuário ou ID do contato não podem ser nulos");
+        }
+
+
+        Contato contato = contatoRepository.findById(contatoId)
+                .orElseThrow(() -> new RuntimeException("Contato não encontrado"));
+
+        if (!Objects.equals(contato.getUsuario().getEmail(), userSignedIn.getEmail())) {
+            throw new IllegalArgumentException("Contato não pertence ao usuário autenticado");
+        }
+
+
+        Pageable pageable = PageRequest.of(page, size);
+
+
+        return enderecoRepository.findByContatoId(contatoId, pageable);
+    }
 }

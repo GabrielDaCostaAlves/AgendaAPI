@@ -5,17 +5,18 @@ import com.agendaapi.agendaapi.dto.contatodto.ContatoDto;
 import com.agendaapi.agendaapi.dto.contatodto.ContatoUpdateDto;
 import com.agendaapi.agendaapi.dto.contatodto.EnderecoDto;
 import com.agendaapi.agendaapi.dto.contatodto.TelefoneDto;
-import com.agendaapi.agendaapi.model.Contato;
-import com.agendaapi.agendaapi.model.Endereco;
-import com.agendaapi.agendaapi.model.Telefone;
-import com.agendaapi.agendaapi.model.Usuario;
+import com.agendaapi.agendaapi.model.entity.Contato;
+import com.agendaapi.agendaapi.model.entity.Endereco;
+import com.agendaapi.agendaapi.model.entity.Telefone;
+import com.agendaapi.agendaapi.model.entity.Usuario;
 import com.agendaapi.agendaapi.repository.ContatoRepository;
 import com.agendaapi.agendaapi.repository.EnderecoRepository;
 import com.agendaapi.agendaapi.repository.TelefoneRepository;
-import com.agendaapi.agendaapi.repository.UsuarioRepository;
-import com.agendaapi.agendaapi.security.JwtTokenService;
-import io.swagger.v3.oas.annotations.tags.Tag;
+import com.agendaapi.agendaapi.vo.ContatoVO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -125,9 +126,10 @@ public class ContatoService {
     }
 
 
-    //todo: Retorna todos contatos do usuario.
-    public List<Contato> getAllContatos(Usuario userSignedIn) {
-        return null;
+    public Page<ContatoVO> getAllContatos(Usuario userSignedIn, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+
+        return contatoRepository.findAllByUsuarioEmail(userSignedIn.getEmail(), pageable);
     }
 
 

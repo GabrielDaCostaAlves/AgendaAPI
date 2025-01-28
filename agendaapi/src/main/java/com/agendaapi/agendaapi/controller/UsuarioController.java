@@ -3,11 +3,12 @@ package com.agendaapi.agendaapi.controller;
 import com.agendaapi.agendaapi.dto.usuariodto.UsuarioDto;
 import com.agendaapi.agendaapi.dto.usuariodto.LoginUserDto;
 import com.agendaapi.agendaapi.dto.usuariodto.RecoveryJwtTokenDto;
-import com.agendaapi.agendaapi.model.Usuario;
+import com.agendaapi.agendaapi.model.entity.Usuario;
 import com.agendaapi.agendaapi.service.UsuarioService;
 import com.agendaapi.agendaapi.util.conversor.ConverterClass;
 import com.agendaapi.agendaapi.vo.UsuarioVO;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -15,14 +16,14 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.support.DefaultMessageSourceResolvable;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.List;
 
 @RestController
 @RequestMapping("/v1/agenda")
@@ -51,7 +52,7 @@ public class UsuarioController {
                     )
             }
     )
-    @PostMapping("/login")
+    @PostMapping(value = "/login",produces = {MediaType.APPLICATION_JSON_VALUE,MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<?> authenticateUser(
             @Valid @RequestBody LoginUserDto loginUserDto) {
 
@@ -74,7 +75,6 @@ public class UsuarioController {
                     {
                         "nome": "Usuario de teste",
                         "email": "teste.user@email.com",
-                        "criadoEm": "2025-01-24T15:30:00Z",
                         "role": "ROLE_CUSTOMER"
                     }
                     """
@@ -103,7 +103,7 @@ public class UsuarioController {
                     )
             }
     )
-    @PostMapping("/create")
+    @PostMapping(value = "/create",produces = {MediaType.APPLICATION_JSON_VALUE,MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<UsuarioVO> createUser(@Valid @RequestBody UsuarioDto usuarioDto) throws IllegalAccessException, InstantiationException, InvocationTargetException, NoSuchMethodException, NoSuchFieldException {
         Usuario usuario = usuarioService.createUser(usuarioDto);
         UsuarioVO usuarioVO = ConverterClass.convert(usuario, UsuarioVO.class);
@@ -155,7 +155,7 @@ public class UsuarioController {
                     )
             }
     )
-    @PutMapping("/config/update")
+    @PutMapping(value = "/config/update",produces = {MediaType.APPLICATION_JSON_VALUE,MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<UsuarioVO> updateUser(
             @RequestHeader("Authorization") String authorizationHeader,
             @Valid @RequestBody UsuarioDto usuarioDto) throws IllegalAccessException, InstantiationException, InvocationTargetException, NoSuchMethodException, NoSuchFieldException {
@@ -196,5 +196,60 @@ public class UsuarioController {
         Usuario userSignedIn = usuarioService.getContatoByToken(authorizationHeader);
         usuarioService.deleteUser(userSignedIn);
         return new ResponseEntity<>("Usuario deletado com sucesso!", HttpStatus.OK);
+    }
+
+    @Operation(
+            summary = "Listar usuários com paginação",
+            description = "Retorna uma lista de usuários paginada. Somente usuários com a role 'ROLE_ADMINISTRATOR' podem acessar este endpoint.",
+            parameters = {
+                    @Parameter(name = "page", description = "Número da página a ser exibida (padrão 0)", example = "0"),
+                    @Parameter(name = "size", description = "Quantidade de itens por página (padrão 10)", example = "10")
+            },
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Retorna uma lista de usuários paginada. Somente usuários com a role 'ROLE_ADMINISTRATOR' podem acessar este endpoint.",
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = Page.class),
+                                    examples = @ExampleObject(
+                                            name = "Exemplo de resposta",
+                                            value = """
+                        {
+                            "content": [
+                                {
+                                    "nome": "Usuario 1",
+                                    "email": "usuario1@email.com",
+                                    "criadoEm": "2025-01-24T15:30:00Z",
+                                    "role": "ROLE_ADMINISTRATOR"
+                                },
+                                {
+                                    "nome": "Usuario 2",
+                                    "email": "usuario2@email.com",
+                                    "criadoEm": "2025-01-25T16:00:00Z",
+                                    "role": "ROLE_CUSTOMER"
+                                }
+                            ],
+                            "pageable": {
+                                "pageNumber": 0,
+                                "pageSize": 10,
+                                "offset": 0
+                            },
+                            "totalElements": 2,
+                            "totalPages": 1
+                        }
+                        """
+                                    )
+                            )
+                    )
+            }
+    )
+    @GetMapping(value = "/usuarios",produces = {MediaType.APPLICATION_JSON_VALUE,MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<Page<Usuario>> getAllUsuarios(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+
+        Page<Usuario> usuarios = usuarioService.getAllUsers(page, size);
+        return ResponseEntity.ok(usuarios);
     }
 }

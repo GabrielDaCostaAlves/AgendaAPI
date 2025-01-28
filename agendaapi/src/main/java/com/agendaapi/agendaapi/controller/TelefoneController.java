@@ -1,19 +1,22 @@
 package com.agendaapi.agendaapi.controller;
 
 import com.agendaapi.agendaapi.dto.contatodto.TelefoneDto;
-import com.agendaapi.agendaapi.model.Telefone;
-import com.agendaapi.agendaapi.model.Usuario;
+import com.agendaapi.agendaapi.model.entity.Telefone;
+import com.agendaapi.agendaapi.model.entity.Usuario;
 import com.agendaapi.agendaapi.service.TelefoneService;
 import com.agendaapi.agendaapi.service.UsuarioService;
 import com.agendaapi.agendaapi.util.conversor.ConverterClass;
 import com.agendaapi.agendaapi.vo.TelefoneVO;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -241,5 +244,78 @@ public class TelefoneController {
         return new ResponseEntity<>("Usuario deletado com sucesso!", HttpStatus.OK);
     }
 
-    //todo: Endpoit get para baixar lista de telefones do contato.
+
+    @Operation(
+            summary = "Buscar telefones por contato",
+            description = "Retorna uma lista paginada de telefones associados a um contato específico do usuário autenticado.",
+            parameters = {
+                    @Parameter(
+                            name = "Authorization",
+                            description = "Token JWT do usuário autenticado. Deve ser enviado no cabeçalho da requisição.",
+                            in = ParameterIn.HEADER,
+                            required = true,
+                            schema = @Schema(type = "string")
+                    ),
+                    @Parameter(
+                            name = "contatoId",
+                            description = "ID do contato para buscar os telefones associados.",
+                            in = ParameterIn.PATH,
+                            required = true,
+                            schema = @Schema(type = "integer")
+                    ),
+                    @Parameter(
+                            name = "page",
+                            description = "Número da página para a paginação (default: 0).",
+                            in = ParameterIn.QUERY,
+                            required = false,
+                            schema = @Schema(type = "integer", defaultValue = "0")
+                    ),
+                    @Parameter(
+                            name = "size",
+                            description = "Número de itens por página (default: 10).",
+                            in = ParameterIn.QUERY,
+                            required = false,
+                            schema = @Schema(type = "integer", defaultValue = "10")
+                    )
+            },
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Telefones encontrados com sucesso",
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = TelefoneVO.class),
+                                    examples = @ExampleObject(
+                                            name = "Exemplo de resposta",
+                                            value = """
+                                                    [
+                                                        {
+                                                            "numero": "011988887777",
+                                                            "tipo": "Comercial"
+                                                        },
+                                                        {
+                                                            "numero": "011999988888",
+                                                            "tipo": "Residencial"
+                                                        }
+                                                    ]
+                                                    """
+                                    )
+                            )
+                    )
+            }
+    )
+    @GetMapping("/{contatoId}")
+    public Page<TelefoneVO> getTelefonesByContato(
+            @RequestHeader("Authorization") String authorizationHeader,
+            @PathVariable Long contatoId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+
+        Usuario userSignedIn = usuarioService.getContatoByToken(authorizationHeader);
+
+        return telefoneService.getTelefonesByUsuario(contatoId, userSignedIn, page, size);
+    }
+
+
 }

@@ -1,8 +1,8 @@
 package com.agendaapi.agendaapi.controller;
 
 import com.agendaapi.agendaapi.dto.contatodto.EnderecoDto;
-import com.agendaapi.agendaapi.model.Endereco;
-import com.agendaapi.agendaapi.model.Usuario;
+import com.agendaapi.agendaapi.model.entity.Endereco;
+import com.agendaapi.agendaapi.model.entity.Usuario;
 import com.agendaapi.agendaapi.service.EnderecoService;
 import com.agendaapi.agendaapi.service.UsuarioService;
 import com.agendaapi.agendaapi.util.conversor.ConverterClass;
@@ -16,6 +16,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -277,5 +278,83 @@ public class EnderecoController {
         return ResponseEntity.ok(enderecoVO);
     }
 
-    //todo: Criar endpoit get para listar endereços do contato.
+    @Operation(
+            summary = "Buscar endereços por contato",
+            description = "Retorna uma lista paginada de endereços associados a um contato específico do usuário autenticado.",
+            parameters = {
+                    @Parameter(
+                            name = "Authorization",
+                            description = "Token JWT do usuário autenticado. Deve ser enviado no cabeçalho da requisição.",
+                            in = ParameterIn.HEADER,
+                            required = true,
+                            schema = @Schema(type = "string")
+                    ),
+                    @Parameter(
+                            name = "contatoId",
+                            description = "ID do contato para buscar os endereços associados.",
+                            in = ParameterIn.PATH,
+                            required = true,
+                            schema = @Schema(type = "integer")
+                    ),
+                    @Parameter(
+                            name = "page",
+                            description = "Número da página para a paginação (default: 0).",
+                            in = ParameterIn.QUERY,
+                            required = false,
+                            schema = @Schema(type = "integer", defaultValue = "0")
+                    ),
+                    @Parameter(
+                            name = "size",
+                            description = "Número de itens por página (default: 10).",
+                            in = ParameterIn.QUERY,
+                            required = false,
+                            schema = @Schema(type = "integer", defaultValue = "10")
+                    )
+            },
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Endereços encontrados com sucesso",
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = EnderecoVO.class),
+                                    examples = @ExampleObject(
+                                            name = "Exemplo de resposta",
+                                            value = """
+                                                    [
+                                                        {
+                                                            "logradouro": "Rua A",
+                                                            "numero": "123",
+                                                            "bairro": "Centro",
+                                                            "cidade": "São Paulo",
+                                                            "estado": "SP",
+                                                            "cep": "01000-000"
+                                                        },
+                                                        {
+                                                            "logradouro": "Rua B",
+                                                            "numero": "456",
+                                                            "bairro": "Jardim",
+                                                            "cidade": "São Paulo",
+                                                            "estado": "SP",
+                                                            "cep": "02000-000"
+                                                        }
+                                                    ]
+                                                    """
+                                    )
+                            )
+                    )
+            }
+    )
+    @GetMapping("/{contatoId}")
+    public Page<EnderecoVO> getEnderecosByContato(
+            @RequestHeader("Authorization") String authorizationHeader,
+            @PathVariable Long contatoId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        Usuario userSignedIn = usuarioService.getContatoByToken(authorizationHeader);
+
+
+        return enderecoService.getEnderecosByContato(contatoId, userSignedIn, page, size);
+    }
 }

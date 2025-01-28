@@ -1,6 +1,7 @@
-package com.agendaapi.agendaapi.security;
+package com.agendaapi.agendaapi.config;
 
 
+import com.agendaapi.agendaapi.security.UserAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -44,18 +45,19 @@ public class SecurityConfiguration {
             "/v1/agenda/telefones/{contatoId}",
             "/v1/agenda/telefones/{telefoneId}",
             "/v1/agenda/config/update",
-            "/v1/agenda/config/delete"
+            "/v1/agenda/config/delete",
+            "/v1/agenda/usuarios"
     };
 
 
-    // Endpoints que só podem ser acessador por usuários com permissão de cliente
+
     public static final String [] ENDPOINTS_CUSTOMER = {
-            "/users/test/customer"
+
     };
 
-    // Endpoints que só podem ser acessador por usuários com permissão de administrador
+
     public static final String [] ENDPOINTS_ADMIN = {
-            "/users/test/administrator"
+            "/v1/agenda/usuarios"
     };
 
     @Bean
