@@ -18,6 +18,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -87,7 +88,9 @@ public class EnderecoController {
                     )
             }
     )
-    @PostMapping("/{contatoId}")
+    @PostMapping(value = "/{contatoId}",
+            consumes =  {MediaType.APPLICATION_JSON_VALUE,MediaType.APPLICATION_XML_VALUE},
+            produces = {MediaType.APPLICATION_JSON_VALUE,MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<EnderecoVO> createEndereco(
             @RequestHeader("Authorization") String authorizationHeader,
             @RequestBody @Valid EnderecoDto enderecoDto,
@@ -152,7 +155,9 @@ public class EnderecoController {
                     )
             }
     )
-    @PutMapping("/{enderecoId}")
+    @PutMapping(value = "/{enderecoId}",
+            consumes =  {MediaType.APPLICATION_JSON_VALUE,MediaType.APPLICATION_XML_VALUE},
+            produces = {MediaType.APPLICATION_JSON_VALUE,MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<EnderecoVO> updateEndereco(
             @RequestHeader("Authorization") String authorizationHeader,
             @PathVariable Long enderecoId,
@@ -262,7 +267,8 @@ public class EnderecoController {
                     )
             }
     )
-    @GetMapping("/{enderecoId}")
+    @GetMapping(value = "/{enderecoId}",
+            produces = {MediaType.APPLICATION_JSON_VALUE,MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<EnderecoVO> getEnderecoById(
             @RequestHeader("Authorization") String authorizationHeader,
             @PathVariable Long enderecoId) throws NoSuchFieldException, InvocationTargetException, IllegalAccessException, InstantiationException, NoSuchMethodException {
@@ -345,7 +351,8 @@ public class EnderecoController {
                     )
             }
     )
-    @GetMapping("/{contatoId}")
+    @GetMapping(value = "/{contatoId}",
+            produces = {MediaType.APPLICATION_JSON_VALUE,MediaType.APPLICATION_XML_VALUE})
     public Page<EnderecoVO> getEnderecosByContato(
             @RequestHeader("Authorization") String authorizationHeader,
             @PathVariable Long contatoId,

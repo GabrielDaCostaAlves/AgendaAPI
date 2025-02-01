@@ -61,9 +61,16 @@ public class UserAuthenticationFilter extends OncePerRequestFilter {
     // Verifica se o endpoint requer autenticação antes de processar a requisição
     private boolean checkIfEndpointIsNotPublic(HttpServletRequest request) {
         String requestURI = request.getRequestURI();
-        // Verifica se o endpoint é público
-        return !Arrays.stream(SecurityConfiguration.ENDPOINTS_WITH_AUTHENTICATION_NOT_REQUIRED)
-                .anyMatch(requestURI::startsWith);
+        System.out.println("🔍 Verificando acesso para URI: " + requestURI);
+
+        // Verifica se algum dos endpoints públicos realmente corresponde
+        boolean isPublic = Arrays.stream(SecurityConfiguration.ENDPOINTS_WITH_AUTHENTICATION_NOT_REQUIRED)
+                .map(pattern -> pattern.replace("**", ".*")) // Converte ** para regex .*
+                .anyMatch(requestURI::matches);
+
+        System.out.println("✅ O endpoint é público? " + isPublic);
+
+        return !isPublic; // Se for público, retorna false
     }
 
 }

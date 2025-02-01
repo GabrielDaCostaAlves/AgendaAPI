@@ -30,6 +30,7 @@ public class SecurityConfiguration {
             "/v3/api-docs/**",
             "/swagger-resources/**",
             "/webjars/**",
+            "/favicon.ico",
             "/v1/agenda/login",
             "/v1/agenda/create",
             "/swagger-ui/index.html",

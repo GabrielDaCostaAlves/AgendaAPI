@@ -18,6 +18,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -76,7 +77,9 @@ public class TelefoneController {
                     )
             }
     )
-    @PostMapping("/{contatoId}")
+    @PostMapping(value = "/{contatoId}",
+            consumes =  {MediaType.APPLICATION_JSON_VALUE,MediaType.APPLICATION_XML_VALUE},
+            produces = {MediaType.APPLICATION_JSON_VALUE,MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<TelefoneVO> createTelefone(
             @RequestHeader("Authorization") String authorizationHeader,
             @RequestBody @Valid TelefoneDto telefoneDto,
@@ -131,7 +134,9 @@ public class TelefoneController {
                     )
             }
     )
-    @PutMapping("/{telefoneId}")
+    @PutMapping(value = "/{telefoneId}",
+            consumes =  {MediaType.APPLICATION_JSON_VALUE,MediaType.APPLICATION_XML_VALUE},
+            produces = {MediaType.APPLICATION_JSON_VALUE,MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<TelefoneVO> updateTelefone(
             @RequestHeader("Authorization") String authorizationHeader,
             @PathVariable Long telefoneId,
@@ -187,7 +192,8 @@ public class TelefoneController {
                     )
             }
     )
-    @GetMapping("/{telefoneId}")
+    @GetMapping(value = "/{telefoneId}",
+            produces = {MediaType.APPLICATION_JSON_VALUE,MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<TelefoneVO> getTelefoneById(
             @RequestHeader("Authorization") String authorizationHeader,
             @PathVariable Long telefoneId) throws NoSuchFieldException, InvocationTargetException, IllegalAccessException, InstantiationException, NoSuchMethodException {
@@ -304,7 +310,8 @@ public class TelefoneController {
                     )
             }
     )
-    @GetMapping("/{contatoId}")
+    @GetMapping(value = "/{contatoId}",
+            produces = {MediaType.APPLICATION_JSON_VALUE,MediaType.APPLICATION_XML_VALUE})
     public Page<TelefoneVO> getTelefonesByContato(
             @RequestHeader("Authorization") String authorizationHeader,
             @PathVariable Long contatoId,

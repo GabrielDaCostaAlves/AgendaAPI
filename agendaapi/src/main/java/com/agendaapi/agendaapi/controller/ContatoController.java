@@ -19,6 +19,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -92,7 +93,9 @@ public class ContatoController {
                     )
             }
     )
-    @PostMapping
+    @PostMapping(
+            consumes =  {MediaType.APPLICATION_JSON_VALUE,MediaType.APPLICATION_XML_VALUE},
+            produces = {MediaType.APPLICATION_JSON_VALUE,MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<ContatoVO> createContato(
             @RequestHeader("Authorization") String authorizationHeader,
             @RequestBody @Valid ContatoDto contatoDto) throws NoSuchFieldException, InvocationTargetException, IllegalAccessException, InstantiationException, NoSuchMethodException {
@@ -146,7 +149,9 @@ public class ContatoController {
                     )
             }
     )
-    @PutMapping("/{contatoId}")
+    @PutMapping(value = "/{contatoId}",
+            consumes =  {MediaType.APPLICATION_JSON_VALUE,MediaType.APPLICATION_XML_VALUE},
+            produces = {MediaType.APPLICATION_JSON_VALUE,MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<ContatoVO> updateContato(
             @RequestHeader("Authorization") String authorizationHeader,
             @PathVariable Long contatoId,
@@ -163,58 +168,32 @@ public class ContatoController {
     }
 
     @Operation(
-            summary = "Atualizar um contato",
-            description = "Recebe os dados atualizados de um contato existente e realiza a atualização no sistema.",
-            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
-                    description = "Dados necessários para atualizar o contato",
-                    content = @Content(
-                            mediaType = "application/json",
-                            schema = @Schema(implementation = ContatoDto.class),
-                            examples = @ExampleObject(
-                                    name = "Exemplo de entrada",
-                                    value = """
-                                    {
-                                        "nome": "Teste de contato atualizado",
-                                        "dataDeNascimento": "1999-05-10",
-                                        "telefone": {
-                                            "numero": "01199999-8888",
-                                            "tipo": "Celular"
-                                        },
-                                        "endereco": {
-                                            "logradouro": "Rua Atualizada",
-                                            "numero": "100",
-                                            "complemento": "Apartamento 10",
-                                            "bairro": "Atualizado",
-                                            "cidade": "Atualizado",
-                                            "estado": "Atualizado",
-                                            "cep": "11111-111"
-                                        }
-                                    }
-                                    """
-                            )
-                    )
-            ),
+            summary = "Buscar um contato pelo ID",
+            description = "Retorna os dados de um contato específico, desde que pertença ao usuário autenticado.",
             responses = {
                     @ApiResponse(
                             responseCode = "200",
-                            description = "Contato atualizado com sucesso",
+                            description = "Contato encontrado com sucesso",
                             content = @Content(
                                     mediaType = "application/json",
                                     schema = @Schema(implementation = ContatoVO.class),
                                     examples = @ExampleObject(
                                             name = "Exemplo de resposta",
                                             value = """
-                                            {
-                                                "nome": "Teste de contato atualizado",
-                                                "dataDeNascimento": "1999-05-10"
-                                            }
-                                            """
+                    {
+                        "nome": "Teste de contato",
+                        "dataDeNascimento": "1999-05-10"
+                    }
+                    """
                                     )
                             )
-                    )
+                    ),
+                    @ApiResponse(responseCode = "404", description = "Contato não encontrado"),
+                    @ApiResponse(responseCode = "403", description = "Acesso negado")
             }
     )
-    @GetMapping("/{contatoId}")
+    @GetMapping(value = "/{contatoId}",
+            produces = {MediaType.APPLICATION_JSON_VALUE,MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<ContatoVO> getContatoById(
             @RequestHeader("Authorization") String authorizationHeader,
             @PathVariable Long contatoId) throws NoSuchFieldException, InvocationTargetException, IllegalAccessException, InstantiationException, NoSuchMethodException {
@@ -342,7 +321,8 @@ public class ContatoController {
                     )
             }
     )
-    @GetMapping
+    @GetMapping(
+            produces = {MediaType.APPLICATION_JSON_VALUE,MediaType.APPLICATION_XML_VALUE})
     public Page<ContatoVO> getAllContatos(
             @RequestHeader("Authorization") String authorizationHeader,
             @RequestParam(defaultValue = "0") int page,

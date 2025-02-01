@@ -52,7 +52,9 @@ public class UsuarioController {
                     )
             }
     )
-    @PostMapping(value = "/login",produces = {MediaType.APPLICATION_JSON_VALUE,MediaType.APPLICATION_XML_VALUE})
+    @PostMapping(value = "/login",
+            consumes =  {MediaType.APPLICATION_JSON_VALUE,MediaType.APPLICATION_XML_VALUE},
+            produces = {MediaType.APPLICATION_JSON_VALUE,MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<?> authenticateUser(
             @Valid @RequestBody LoginUserDto loginUserDto) {
 
@@ -103,7 +105,9 @@ public class UsuarioController {
                     )
             }
     )
-    @PostMapping(value = "/create",produces = {MediaType.APPLICATION_JSON_VALUE,MediaType.APPLICATION_XML_VALUE})
+    @PostMapping(value = "/create",
+            consumes =  {MediaType.APPLICATION_JSON_VALUE,MediaType.APPLICATION_XML_VALUE},
+            produces = {MediaType.APPLICATION_JSON_VALUE,MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<UsuarioVO> createUser(@Valid @RequestBody UsuarioDto usuarioDto) throws IllegalAccessException, InstantiationException, InvocationTargetException, NoSuchMethodException, NoSuchFieldException {
         Usuario usuario = usuarioService.createUser(usuarioDto);
         UsuarioVO usuarioVO = ConverterClass.convert(usuario, UsuarioVO.class);
@@ -155,7 +159,9 @@ public class UsuarioController {
                     )
             }
     )
-    @PutMapping(value = "/config/update",produces = {MediaType.APPLICATION_JSON_VALUE,MediaType.APPLICATION_XML_VALUE})
+    @PutMapping(value = "/config/update",
+            consumes =  {MediaType.APPLICATION_JSON_VALUE,MediaType.APPLICATION_XML_VALUE},
+            produces = {MediaType.APPLICATION_JSON_VALUE,MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<UsuarioVO> updateUser(
             @RequestHeader("Authorization") String authorizationHeader,
             @Valid @RequestBody UsuarioDto usuarioDto) throws IllegalAccessException, InstantiationException, InvocationTargetException, NoSuchMethodException, NoSuchFieldException {
@@ -252,4 +258,5 @@ public class UsuarioController {
         Page<Usuario> usuarios = usuarioService.getAllUsers(page, size);
         return ResponseEntity.ok(usuarios);
     }
+
 }
