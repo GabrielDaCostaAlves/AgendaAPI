@@ -1,5 +1,6 @@
 package com.agendaapi.agendaapi.controller;
 
+import com.agendaapi.agendaapi.assembler.UsuarioAssembler;
 import com.agendaapi.agendaapi.dto.usuariodto.UsuarioDto;
 import com.agendaapi.agendaapi.dto.usuariodto.LoginUserDto;
 import com.agendaapi.agendaapi.dto.usuariodto.RecoveryJwtTokenDto;
@@ -16,8 +17,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -32,6 +33,9 @@ public class UsuarioController {
 
     @Autowired
     private UsuarioService usuarioService;
+
+    @Autowired
+    private UsuarioAssembler usuarioAssembler;
 
     @Operation(
             summary = "Autenticar usuário",
@@ -53,8 +57,8 @@ public class UsuarioController {
             }
     )
     @PostMapping(value = "/login",
-            consumes =  {MediaType.APPLICATION_JSON_VALUE,MediaType.APPLICATION_XML_VALUE},
-            produces = {MediaType.APPLICATION_JSON_VALUE,MediaType.APPLICATION_XML_VALUE})
+            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<?> authenticateUser(
             @Valid @RequestBody LoginUserDto loginUserDto) {
 
@@ -74,12 +78,12 @@ public class UsuarioController {
                             examples = @ExampleObject(
                                     name = "Exemplo de entrada",
                                     value = """
-                    {
-                        "nome": "Usuario de teste",
-                        "email": "teste.user@email.com",
-                        "role": "ROLE_CUSTOMER"
-                    }
-                    """
+                                            {
+                                                "nome": "Usuario de teste",
+                                                "email": "teste.user@email.com",
+                                                "role": "ROLE_CUSTOMER"
+                                            }
+                                            """
                             )
                     )
             ),
@@ -93,21 +97,21 @@ public class UsuarioController {
                                     examples = @ExampleObject(
                                             name = "Exemplo de resposta",
                                             value = """
-                        {
-                            "nome": "Usuario de teste",
-                            "email": "teste.user@email.com",
-                            "criadoEm": "2025-01-24T15:30:00Z",
-                            "role": "ROLE_CUSTOMER"
-                        }
-                        """
+                                                    {
+                                                        "nome": "Usuario de teste",
+                                                        "email": "teste.user@email.com",
+                                                        "criadoEm": "2025-01-24T15:30:00Z",
+                                                        "role": "ROLE_CUSTOMER"
+                                                    }
+                                                    """
                                     )
                             )
                     )
             }
     )
     @PostMapping(value = "/create",
-            consumes =  {MediaType.APPLICATION_JSON_VALUE,MediaType.APPLICATION_XML_VALUE},
-            produces = {MediaType.APPLICATION_JSON_VALUE,MediaType.APPLICATION_XML_VALUE})
+            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<UsuarioVO> createUser(@Valid @RequestBody UsuarioDto usuarioDto) throws IllegalAccessException, InstantiationException, InvocationTargetException, NoSuchMethodException, NoSuchFieldException {
         Usuario usuario = usuarioService.createUser(usuarioDto);
         UsuarioVO usuarioVO = ConverterClass.convert(usuario, UsuarioVO.class);
@@ -127,13 +131,13 @@ public class UsuarioController {
                             examples = @ExampleObject(
                                     name = "Exemplo de entrada",
                                     value = """
-                        {
-                            "nome": "Usuario de teste",
-                            "email": "teste.atualizado@email.com",
-                            "criadoEm": "2025-01-24T15:30:00Z",
-                            "role": "ROLE_CUSTOMER"
-                        }
-                        """
+                                            {
+                                                "nome": "Usuario de teste",
+                                                "email": "teste.atualizado@email.com",
+                                                "criadoEm": "2025-01-24T15:30:00Z",
+                                                "role": "ROLE_CUSTOMER"
+                                            }
+                                            """
                             )
                     )
             ),
@@ -147,21 +151,21 @@ public class UsuarioController {
                                     examples = @ExampleObject(
                                             name = "Exemplo de resposta",
                                             value = """
-                            {
-                                "nome": "Usuario de teste",
-                                "email": "teste.atualizado@email.com",
-                                "criadoEm": "2025-01-24T15:30:00Z",
-                                "role": "ROLE_CUSTOMER"
-                            }
-                            """
+                                                    {
+                                                        "nome": "Usuario de teste",
+                                                        "email": "teste.atualizado@email.com",
+                                                        "criadoEm": "2025-01-24T15:30:00Z",
+                                                        "role": "ROLE_CUSTOMER"
+                                                    }
+                                                    """
                                     )
                             )
                     )
             }
     )
     @PutMapping(value = "/config/update",
-            consumes =  {MediaType.APPLICATION_JSON_VALUE,MediaType.APPLICATION_XML_VALUE},
-            produces = {MediaType.APPLICATION_JSON_VALUE,MediaType.APPLICATION_XML_VALUE})
+            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<UsuarioVO> updateUser(
             @RequestHeader("Authorization") String authorizationHeader,
             @Valid @RequestBody UsuarioDto usuarioDto) throws IllegalAccessException, InstantiationException, InvocationTargetException, NoSuchMethodException, NoSuchFieldException {
@@ -185,10 +189,10 @@ public class UsuarioController {
                                     examples = @ExampleObject(
                                             name = "Exemplo de resposta",
                                             value = """
-                            {
-                                "message": "Usuário deletado com sucesso!"
-                            }
-                            """
+                                                    {
+                                                        "message": "Usuário deletado com sucesso!"
+                                                    }
+                                                    """
                                     )
                             )
                     )
@@ -221,42 +225,54 @@ public class UsuarioController {
                                     examples = @ExampleObject(
                                             name = "Exemplo de resposta",
                                             value = """
-                        {
-                            "content": [
-                                {
-                                    "nome": "Usuario 1",
-                                    "email": "usuario1@email.com",
-                                    "criadoEm": "2025-01-24T15:30:00Z",
-                                    "role": "ROLE_ADMINISTRATOR"
-                                },
-                                {
-                                    "nome": "Usuario 2",
-                                    "email": "usuario2@email.com",
-                                    "criadoEm": "2025-01-25T16:00:00Z",
-                                    "role": "ROLE_CUSTOMER"
-                                }
-                            ],
-                            "pageable": {
-                                "pageNumber": 0,
-                                "pageSize": 10,
-                                "offset": 0
-                            },
-                            "totalElements": 2,
-                            "totalPages": 1
-                        }
-                        """
+                                                    {
+                                                        "content": [
+                                                            {
+                                                                "nome": "Usuario 1",
+                                                                "email": "usuario1@email.com",
+                                                                "criadoEm": "2025-01-24T15:30:00Z",
+                                                                "role": "ROLE_ADMINISTRATOR"
+                                                            },
+                                                            {
+                                                                "nome": "Usuario 2",
+                                                                "email": "usuario2@email.com",
+                                                                "criadoEm": "2025-01-25T16:00:00Z",
+                                                                "role": "ROLE_CUSTOMER"
+                                                            }
+                                                        ],
+                                                        "pageable": {
+                                                            "pageNumber": 0,
+                                                            "pageSize": 10,
+                                                            "offset": 0
+                                                        },
+                                                        "totalElements": 2,
+                                                        "totalPages": 1
+                                                    }
+                                                    """
                                     )
                             )
                     )
             }
     )
-    @GetMapping(value = "/usuarios",produces = {MediaType.APPLICATION_JSON_VALUE,MediaType.APPLICATION_XML_VALUE})
+    @GetMapping(value = "/usuarios", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<Page<Usuario>> getAllUsuarios(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
 
         Page<Usuario> usuarios = usuarioService.getAllUsers(page, size);
         return ResponseEntity.ok(usuarios);
+    }
+
+
+    @GetMapping("/{userId}")
+    public EntityModel<UsuarioVO> getUsuario(@PathVariable Long userId) {
+        Usuario usuario = usuarioService.getUsuarioById(userId);
+
+        if (usuario == null) {
+            throw new RuntimeException("Ocorreu um erro ao tentar localizar o usuario");
+        }
+
+        return usuarioAssembler.toModel(usuario);
     }
 
 }

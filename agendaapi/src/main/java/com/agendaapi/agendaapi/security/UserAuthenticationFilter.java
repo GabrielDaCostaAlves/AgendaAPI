@@ -63,14 +63,15 @@ public class UserAuthenticationFilter extends OncePerRequestFilter {
         String requestURI = request.getRequestURI();
         System.out.println("🔍 Verificando acesso para URI: " + requestURI);
 
-        // Verifica se algum dos endpoints públicos realmente corresponde
         boolean isPublic = Arrays.stream(SecurityConfiguration.ENDPOINTS_WITH_AUTHENTICATION_NOT_REQUIRED)
-                .map(pattern -> pattern.replace("**", ".*")) // Converte ** para regex .*
+                .map(pattern -> pattern.replace("{userId}", "\\d+")) // Substitui {userId} por \d+ para números
+                .map(pattern -> pattern.replace("**", ".*"))  // Converte ** para regex .*
                 .anyMatch(requestURI::matches);
 
         System.out.println("✅ O endpoint é público? " + isPublic);
 
-        return !isPublic; // Se for público, retorna false
+        return !isPublic;
     }
+
 
 }

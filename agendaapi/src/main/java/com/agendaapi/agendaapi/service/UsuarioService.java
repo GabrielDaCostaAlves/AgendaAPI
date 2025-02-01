@@ -41,7 +41,9 @@ public class UsuarioService {
     @Autowired
     private SecurityConfiguration securityConfiguration;
 
-
+    public Usuario getUsuarioById(Long userId) {
+        return usuarioRepository.findById(userId).orElse(null);
+    }
 
     public RecoveryJwtTokenDto authenticateUser(LoginUserDto loginUserDto) {
 

@@ -25,6 +25,8 @@ public class SecurityConfiguration {
 
 
     public static final String[] ENDPOINTS_WITH_AUTHENTICATION_NOT_REQUIRED = {
+            "/v1/agenda/{userId}",
+            "/v1/agenda/usuarios",
             "/swagger-ui/**",
             "/swagger-ui.html",
             "/v3/api-docs/**",
@@ -46,8 +48,7 @@ public class SecurityConfiguration {
             "/v1/agenda/telefones/{contatoId}",
             "/v1/agenda/telefones/{telefoneId}",
             "/v1/agenda/config/update",
-            "/v1/agenda/config/delete",
-            "/v1/agenda/usuarios"
+            "/v1/agenda/config/delete"
     };
 
 

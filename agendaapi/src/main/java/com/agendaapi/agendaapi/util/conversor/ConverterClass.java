@@ -32,6 +32,14 @@ public class ConverterClass {
                         targetField.set(target, roleNameField.get(role)); // Define o valor em UsuarioVO
                     }
                 }
+
+                // Tratamento específico para o campo "id" (agora key)
+                if (targetField.getName().equals("key") && sourceField.getName().equals("id")) {
+                    Long id = (Long) sourceField.get(source); // Obtem o id da entidade Usuario
+                    if (id != null) {
+                        targetField.set(target, id.toString()); // Define o valor de key como String
+                    }
+                }
             }
         }
 

@@ -6,6 +6,8 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.RepresentationModel;
 
 import java.time.ZonedDateTime;
 
@@ -13,9 +15,12 @@ import java.time.ZonedDateTime;
 @NoArgsConstructor
 @Getter
 @JacksonXmlRootElement(localName = "UsuarioVO") // Define o nome do elemento raiz no XML
-public class UsuarioVO {
+public class UsuarioVO extends RepresentationModel<UsuarioVO> {
 
-    @JsonProperty("nome") // Define a propriedade para JSON e XML
+    @JsonProperty("id")  // O campo id agora é key
+    private String key;  // Mudou para String, já que estamos usando o id de Usuario convertido
+
+    @JsonProperty("nome")
     private String nome;
 
     @JsonProperty("email")
@@ -26,4 +31,10 @@ public class UsuarioVO {
 
     @JsonProperty("role")
     private RoleName role;
+
+    private EntityModel<UsuarioVO> usuarioLinks;
+
+    public void setUsuarioLinks(EntityModel<UsuarioVO> usuarioLinks) {
+        this.usuarioLinks = usuarioLinks;
+    }
 }
