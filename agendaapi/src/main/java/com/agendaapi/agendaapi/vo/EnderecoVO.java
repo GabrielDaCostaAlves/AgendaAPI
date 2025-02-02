@@ -1,14 +1,25 @@
 package com.agendaapi.agendaapi.vo;
 
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
+
+@JacksonXmlRootElement(localName = "EnderecoVO")
 public class EnderecoVO {
 
-    private String logradouro; // Ex: Rua, Avenida, etc.
-    private String numero; // Número da casa/apartamento
-    private String complemento; // Ex: Apartamento, Bloco, Andar, etc.
-    private String bairro; // Bairro
-    private String cidade; // Cidade
-    private String estado; // Estado
-    private String cep; // Código postal
+    @JsonProperty("logradouro")
+    private String logradouro;
+    @JsonProperty("numero")
+    private String numero;
+    @JsonProperty("complemento")
+    private String complemento;
+    @JsonProperty("bairro")
+    private String bairro;
+    @JsonProperty("cidade")
+    private String cidade;
+    @JsonProperty("estado")
+    private String estado;
+    @JsonProperty("cep")
+    private String cep;
 
 }

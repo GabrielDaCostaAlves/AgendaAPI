@@ -264,7 +264,7 @@ public class UsuarioController {
     }
 
 
-    @GetMapping("/{userId}")
+    @GetMapping(value = "/{userId}",produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public EntityModel<UsuarioVO> getUsuario(@PathVariable Long userId) {
         Usuario usuario = usuarioService.getUsuarioById(userId);
 

@@ -17,8 +17,8 @@ import java.time.ZonedDateTime;
 @JacksonXmlRootElement(localName = "UsuarioVO") // Define o nome do elemento raiz no XML
 public class UsuarioVO extends RepresentationModel<UsuarioVO> {
 
-    @JsonProperty("id")  // O campo id agora é key
-    private String key;  // Mudou para String, já que estamos usando o id de Usuario convertido
+    @JsonProperty("id")
+    private String key;
 
     @JsonProperty("nome")
     private String nome;
