@@ -1,9 +1,12 @@
 package com.agendaapi.agendaapi.repository;
 
-import com.agendaapi.agendaapi.model.entity.Contato;
-import com.agendaapi.agendaapi.model.entity.Role;
-import com.agendaapi.agendaapi.model.entity.Usuario;
-import com.agendaapi.agendaapi.model.enums.RoleName;
+import com.agendaapi.agendaapi.domain.model.entity.contato.Contato;
+import com.agendaapi.agendaapi.domain.model.entity.usuario.Role;
+import com.agendaapi.agendaapi.domain.model.entity.usuario.Usuario;
+import com.agendaapi.agendaapi.domain.model.enums.RoleName;
+import com.agendaapi.agendaapi.domain.repository.ContatoRepository;
+import com.agendaapi.agendaapi.domain.repository.RoleRepository;
+import com.agendaapi.agendaapi.domain.repository.UsuarioRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

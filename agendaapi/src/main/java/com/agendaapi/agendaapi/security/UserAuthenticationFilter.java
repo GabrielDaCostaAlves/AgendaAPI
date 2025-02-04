@@ -1,8 +1,8 @@
 package com.agendaapi.agendaapi.security;
 
 import com.agendaapi.agendaapi.config.SecurityConfiguration;
-import com.agendaapi.agendaapi.model.entity.Usuario;
-import com.agendaapi.agendaapi.repository.UsuarioRepository;
+import com.agendaapi.agendaapi.domain.model.entity.usuario.Usuario;
+import com.agendaapi.agendaapi.domain.repository.UsuarioRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

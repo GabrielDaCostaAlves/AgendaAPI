@@ -1,6 +1,6 @@
 package com.agendaapi.agendaapi.vo;
 
-import com.agendaapi.agendaapi.model.enums.RoleName;
+import com.agendaapi.agendaapi.domain.model.enums.RoleName;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import lombok.AllArgsConstructor;

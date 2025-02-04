@@ -1,7 +1,7 @@
-package com.agendaapi.agendaapi.repository;
+package com.agendaapi.agendaapi.domain.repository;
 
-import com.agendaapi.agendaapi.model.entity.Role;
-import com.agendaapi.agendaapi.model.enums.RoleName;
+import com.agendaapi.agendaapi.domain.model.entity.usuario.Role;
+import com.agendaapi.agendaapi.domain.model.enums.RoleName;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

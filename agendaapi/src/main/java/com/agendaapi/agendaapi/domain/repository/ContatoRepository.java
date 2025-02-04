@@ -1,6 +1,6 @@
-package com.agendaapi.agendaapi.repository;
+package com.agendaapi.agendaapi.domain.repository;
 
-import com.agendaapi.agendaapi.model.entity.Contato;
+import com.agendaapi.agendaapi.domain.model.entity.contato.Contato;
 import com.agendaapi.agendaapi.vo.ContatoVO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

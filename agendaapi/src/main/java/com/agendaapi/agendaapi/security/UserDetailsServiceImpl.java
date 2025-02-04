@@ -1,7 +1,7 @@
 package com.agendaapi.agendaapi.security;
 
-import com.agendaapi.agendaapi.model.entity.Usuario;
-import com.agendaapi.agendaapi.repository.UsuarioRepository;
+import com.agendaapi.agendaapi.domain.model.entity.usuario.Usuario;
+import com.agendaapi.agendaapi.domain.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

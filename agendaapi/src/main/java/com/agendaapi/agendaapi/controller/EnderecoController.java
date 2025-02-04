@@ -1,10 +1,10 @@
 package com.agendaapi.agendaapi.controller;
 
 import com.agendaapi.agendaapi.dto.contatodto.EnderecoDto;
-import com.agendaapi.agendaapi.model.entity.Endereco;
-import com.agendaapi.agendaapi.model.entity.Usuario;
-import com.agendaapi.agendaapi.service.EnderecoService;
-import com.agendaapi.agendaapi.service.UsuarioService;
+import com.agendaapi.agendaapi.domain.model.entity.contato.Endereco;
+import com.agendaapi.agendaapi.domain.model.entity.usuario.Usuario;
+import com.agendaapi.agendaapi.domain.service.EnderecoService;
+import com.agendaapi.agendaapi.domain.service.UsuarioService;
 import com.agendaapi.agendaapi.util.conversor.ConverterClass;
 import com.agendaapi.agendaapi.vo.EnderecoVO;
 import io.swagger.v3.oas.annotations.Operation;

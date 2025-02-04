@@ -1,13 +1,12 @@
-package com.agendaapi.agendaapi.service;
+package com.agendaapi.agendaapi.domain.service;
 
 import com.agendaapi.agendaapi.dto.contatodto.EnderecoDto;
-import com.agendaapi.agendaapi.model.entity.Endereco;
-import com.agendaapi.agendaapi.model.entity.Contato;
-import com.agendaapi.agendaapi.model.entity.Usuario;
-import com.agendaapi.agendaapi.repository.EnderecoRepository;
-import com.agendaapi.agendaapi.repository.ContatoRepository;
+import com.agendaapi.agendaapi.domain.model.entity.contato.Endereco;
+import com.agendaapi.agendaapi.domain.model.entity.contato.Contato;
+import com.agendaapi.agendaapi.domain.model.entity.usuario.Usuario;
+import com.agendaapi.agendaapi.domain.repository.EnderecoRepository;
+import com.agendaapi.agendaapi.domain.repository.ContatoRepository;
 import com.agendaapi.agendaapi.security.JwtTokenService;
-import com.agendaapi.agendaapi.vo.EnderecoVO;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

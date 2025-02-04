@@ -1,5 +1,6 @@
-package com.agendaapi.agendaapi.model.entity;
+package com.agendaapi.agendaapi.domain.model.entity.contato;
 
+import com.agendaapi.agendaapi.domain.model.entity.usuario.Usuario;
 import jakarta.persistence.*;
 import lombok.Builder;
 

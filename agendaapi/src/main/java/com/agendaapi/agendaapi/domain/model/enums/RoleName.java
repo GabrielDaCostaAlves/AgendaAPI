@@ -1,4 +1,4 @@
-package com.agendaapi.agendaapi.model.enums;
+package com.agendaapi.agendaapi.domain.model.enums;
 
 public enum RoleName {
 

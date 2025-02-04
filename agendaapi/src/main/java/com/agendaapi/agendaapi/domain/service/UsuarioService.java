@@ -1,12 +1,12 @@
-package com.agendaapi.agendaapi.service;
+package com.agendaapi.agendaapi.domain.service;
 
 import com.agendaapi.agendaapi.dto.usuariodto.UsuarioDto;
 import com.agendaapi.agendaapi.dto.usuariodto.LoginUserDto;
 import com.agendaapi.agendaapi.dto.usuariodto.RecoveryJwtTokenDto;
-import com.agendaapi.agendaapi.model.entity.Role;
-import com.agendaapi.agendaapi.model.entity.Usuario;
-import com.agendaapi.agendaapi.repository.RoleRepository;
-import com.agendaapi.agendaapi.repository.UsuarioRepository;
+import com.agendaapi.agendaapi.domain.model.entity.usuario.Role;
+import com.agendaapi.agendaapi.domain.model.entity.usuario.Usuario;
+import com.agendaapi.agendaapi.domain.repository.RoleRepository;
+import com.agendaapi.agendaapi.domain.repository.UsuarioRepository;
 import com.agendaapi.agendaapi.security.JwtTokenService;
 import com.agendaapi.agendaapi.config.SecurityConfiguration;
 import com.agendaapi.agendaapi.security.UserDetailsImpl;
@@ -22,7 +22,6 @@ import org.springframework.stereotype.Service;
 import java.lang.reflect.InvocationTargetException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.time.ZonedDateTime;
 
 @Service
 public class UsuarioService {

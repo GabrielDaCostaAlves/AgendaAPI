@@ -1,11 +1,10 @@
-package com.agendaapi.agendaapi.model.entity;
+package com.agendaapi.agendaapi.domain.model.entity.usuario;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Builder;
 
 import java.time.LocalDateTime;
-import java.time.ZonedDateTime;
 import java.util.Objects;
 
 @Entity

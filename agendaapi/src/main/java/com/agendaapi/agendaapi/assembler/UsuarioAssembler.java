@@ -1,11 +1,9 @@
 package com.agendaapi.agendaapi.assembler;
 
 import com.agendaapi.agendaapi.controller.UsuarioController;
-import com.agendaapi.agendaapi.dto.usuariodto.UsuarioDto;
-import com.agendaapi.agendaapi.model.entity.Usuario;
+import com.agendaapi.agendaapi.domain.model.entity.usuario.Usuario;
 import com.agendaapi.agendaapi.util.conversor.ConverterClass;
 import com.agendaapi.agendaapi.vo.UsuarioVO;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.RepresentationModelAssembler;
 import org.springframework.stereotype.Component;

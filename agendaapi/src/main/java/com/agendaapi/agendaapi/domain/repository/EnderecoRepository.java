@@ -1,7 +1,6 @@
-package com.agendaapi.agendaapi.repository;
+package com.agendaapi.agendaapi.domain.repository;
 
-import com.agendaapi.agendaapi.model.entity.Endereco;
-import com.agendaapi.agendaapi.vo.EnderecoVO;
+import com.agendaapi.agendaapi.domain.model.entity.contato.Endereco;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

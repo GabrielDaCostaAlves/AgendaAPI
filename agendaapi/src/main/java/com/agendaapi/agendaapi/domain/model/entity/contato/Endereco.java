@@ -1,4 +1,4 @@
-package com.agendaapi.agendaapi.model.entity;
+package com.agendaapi.agendaapi.domain.model.entity.contato;
 
 import jakarta.persistence.*;
 

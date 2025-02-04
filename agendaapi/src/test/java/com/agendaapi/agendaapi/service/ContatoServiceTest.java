@@ -1,10 +1,11 @@
 package com.agendaapi.agendaapi.service;
 
+import com.agendaapi.agendaapi.domain.service.ContatoService;
 import com.agendaapi.agendaapi.dto.contatodto.ContatoDto;
 import com.agendaapi.agendaapi.dto.contatodto.ContatoUpdateDto;
-import com.agendaapi.agendaapi.model.entity.Contato;
-import com.agendaapi.agendaapi.model.entity.Usuario;
-import com.agendaapi.agendaapi.repository.ContatoRepository;
+import com.agendaapi.agendaapi.domain.model.entity.contato.Contato;
+import com.agendaapi.agendaapi.domain.model.entity.usuario.Usuario;
+import com.agendaapi.agendaapi.domain.repository.ContatoRepository;
 import com.agendaapi.agendaapi.vo.ContatoVO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

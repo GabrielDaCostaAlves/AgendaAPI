@@ -1,12 +1,12 @@
 package com.agendaapi.agendaapi.service;
 
+import com.agendaapi.agendaapi.domain.service.TelefoneService;
 import com.agendaapi.agendaapi.dto.contatodto.TelefoneDto;
-import com.agendaapi.agendaapi.model.entity.Contato;
-import com.agendaapi.agendaapi.model.entity.Telefone;
-import com.agendaapi.agendaapi.model.entity.Usuario;
-import com.agendaapi.agendaapi.repository.TelefoneRepository;
-import com.agendaapi.agendaapi.repository.ContatoRepository;
-import jakarta.persistence.EntityNotFoundException;
+import com.agendaapi.agendaapi.domain.model.entity.contato.Contato;
+import com.agendaapi.agendaapi.domain.model.entity.contato.Telefone;
+import com.agendaapi.agendaapi.domain.model.entity.usuario.Usuario;
+import com.agendaapi.agendaapi.domain.repository.TelefoneRepository;
+import com.agendaapi.agendaapi.domain.repository.ContatoRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
