@@ -4,7 +4,7 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.15.xsd">
 
-    <!-- Primeiro cria a tabela role -->
+
     <changeSet id="2-create-role-table" author="Gabriel">
         <sql>
             CREATE TABLE role (
@@ -14,7 +14,7 @@
         </sql>
     </changeSet>
 
-    <!-- Depois cria a tabela usuario -->
+
     <changeSet id="1-create-usuario-table" author="Gabriel">
         <sql>
             CREATE TABLE usuario (

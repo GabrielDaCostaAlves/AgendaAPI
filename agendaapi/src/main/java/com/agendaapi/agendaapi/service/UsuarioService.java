@@ -20,6 +20,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.InvocationTargetException;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
@@ -73,8 +74,7 @@ public class UsuarioService {
                 .passwordEncoder().encode(usuarioDto.password()), role
         );
 
-        newUser.setCriadoEm(ZonedDateTime.now(ZoneId.of("America/Sao_Paulo")));
-
+        newUser.setCriadoEm(LocalDateTime.now(ZoneId.of("America/Sao_Paulo")));
         try{
             return usuarioRepository.save(newUser);
         } catch (RuntimeException e) {

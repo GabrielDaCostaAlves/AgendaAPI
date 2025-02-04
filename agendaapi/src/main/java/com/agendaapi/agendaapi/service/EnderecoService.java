@@ -125,7 +125,7 @@ public class EnderecoService {
     }
 
 
-    public Page<EnderecoVO> getEnderecosByContato(Long contatoId, Usuario userSignedIn, int page, int size) {
+    public Page<Endereco> getEnderecosByContato(Long contatoId, Usuario userSignedIn, int page, int size) {
         if (userSignedIn == null || contatoId == null) {
             throw new IllegalArgumentException("Usuário ou ID do contato não podem ser nulos");
         }

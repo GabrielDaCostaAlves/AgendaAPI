@@ -321,7 +321,15 @@ public class TelefoneController {
 
         Usuario userSignedIn = usuarioService.getContatoByToken(authorizationHeader);
 
-        return telefoneService.getTelefonesByUsuario(contatoId, userSignedIn, page, size);
+        Page<Telefone> telefones = telefoneService.getTelefonesByUsuario(contatoId, userSignedIn, page, size);
+
+        return telefones.map(telefone -> {
+            try {
+                return ConverterClass.convert(telefone, TelefoneVO.class);
+            } catch (Exception e) {
+                throw new RuntimeException("Erro ao converter Telefone para TelefoneVO", e);
+            }
+        });
     }
 
 

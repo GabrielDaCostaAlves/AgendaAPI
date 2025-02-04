@@ -362,6 +362,13 @@ public class EnderecoController {
         Usuario userSignedIn = usuarioService.getContatoByToken(authorizationHeader);
 
 
-        return enderecoService.getEnderecosByContato(contatoId, userSignedIn, page, size);
+        Page<Endereco> enderecos = enderecoService.getEnderecosByContato(contatoId, userSignedIn, page, size);
+        return enderecos.map(endereco -> {
+            try {
+                return ConverterClass.convert(endereco, EnderecoVO.class);
+            } catch (Exception e) {
+                throw new RuntimeException("Erro ao converter Endereco para EnderecoVO", e);
+            }
+        });
     }
 }

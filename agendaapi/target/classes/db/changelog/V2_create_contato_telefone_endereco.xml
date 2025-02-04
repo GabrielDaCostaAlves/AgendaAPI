@@ -4,7 +4,7 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.15.xsd">
 
-    <!-- Criação da tabela Contato -->
+
     <changeSet id="3-create-contato-table" author="Gabriel">
         <sql>
             CREATE TABLE contato (
@@ -17,7 +17,6 @@
         </sql>
     </changeSet>
 
-    <!-- Criação da tabela Telefone -->
     <changeSet id="4-create-telefone-table" author="Gabriel">
         <sql>
             CREATE TABLE telefone (
@@ -30,7 +29,7 @@
         </sql>
     </changeSet>
 
-    <!-- Criação da tabela Endereco -->
+
     <changeSet id="5-create-endereco-table" author="Gabriel">
         <sql>
             CREATE TABLE endereco (

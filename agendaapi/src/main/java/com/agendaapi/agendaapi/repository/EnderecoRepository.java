@@ -10,5 +10,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface EnderecoRepository extends JpaRepository<Endereco, Long> {
 
-    Page<EnderecoVO> findByContatoId(Long contatoId, Pageable pageable);
+    Page<Endereco> findByContatoId(Long contatoId, Pageable pageable);
 }

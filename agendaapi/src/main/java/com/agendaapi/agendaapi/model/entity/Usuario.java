@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Builder;
 
+import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.util.Objects;
 
@@ -25,7 +26,7 @@ public class Usuario {
     private String password;
 
     @Column(name = "criado_em")
-    private ZonedDateTime criadoEm;
+    private LocalDateTime criadoEm;
 
 
     @ManyToOne(fetch = FetchType.EAGER)
@@ -75,11 +76,11 @@ public class Usuario {
         this.password = password;
     }
 
-    public ZonedDateTime getCriadoEm() {
+    public LocalDateTime getCriadoEm() {
         return criadoEm;
     }
 
-    public void setCriadoEm(ZonedDateTime criadoEm) {
+    public void setCriadoEm(LocalDateTime  criadoEm) {
         this.criadoEm = criadoEm;
     }
 

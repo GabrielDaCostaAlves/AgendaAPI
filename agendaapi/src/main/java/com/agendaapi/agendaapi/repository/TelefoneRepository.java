@@ -10,5 +10,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface TelefoneRepository extends JpaRepository<Telefone, Long> {
 
-    Page<TelefoneVO> findByContatoId(Long contatoId, Pageable pageable);
+    Page<Telefone> findByContatoId(Long contatoId, Pageable pageable);
 }

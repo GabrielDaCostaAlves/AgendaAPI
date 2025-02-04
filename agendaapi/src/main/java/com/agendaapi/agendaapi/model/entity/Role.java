@@ -18,7 +18,10 @@ public class Role {
     private Long id;
 
     @Enumerated(EnumType.STRING)
-    private RoleName name;
+    private   RoleName name;
+
+    public Role(RoleName roleName) {
+    }
 
 
     public Long getId() {
@@ -36,6 +39,11 @@ public class Role {
     public void setName(RoleName name) {
         this.name = name;
     }
+
+    public Role() {
+
+    }
+
 
     @Override
     public boolean equals(Object o) {

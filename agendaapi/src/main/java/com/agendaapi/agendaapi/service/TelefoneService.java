@@ -118,7 +118,7 @@ public class TelefoneService {
     }
 
 
-    public Page<TelefoneVO> getTelefonesByUsuario(Long contatoId, Usuario userSignedIn, int page, int size) {
+    public Page<Telefone> getTelefonesByUsuario(Long contatoId, Usuario userSignedIn, int page, int size) {
 
         if (userSignedIn == null || contatoId == null) {
             throw new IllegalArgumentException("Usuário ou ID do contato não podem ser nulos");
