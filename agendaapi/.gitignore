@@ -1,0 +1,12 @@
+# Ignorar arquivos sensíveis
+.env
+src/main/resources/application-secret.properties
+
+# Ignorar diretórios do Maven
+/target/
+
+# Logs
+*.log
+
+# Arquivos de cache
+*.cache

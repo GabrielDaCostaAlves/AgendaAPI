@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.15.xsd">
+
+
+    <changeSet id="3-create-contato-table" author="Gabriel">
+        <sql>
+            CREATE TABLE contato (
+            id BIGINT AUTO_INCREMENT PRIMARY KEY,
+            nome VARCHAR(100) NOT NULL,
+            data_nascimento DATE NOT NULL,
+            usuario_id BIGINT NOT NULL,  -- Chave estrangeira para a tabela de Usuário
+            CONSTRAINT fk_usuario FOREIGN KEY (usuario_id) REFERENCES usuario(id) ON DELETE CASCADE
+            );
+        </sql>
+    </changeSet>
+
+    <changeSet id="4-create-telefone-table" author="Gabriel">
+        <sql>
+            CREATE TABLE telefone (
+            id BIGINT AUTO_INCREMENT PRIMARY KEY,
+            numero VARCHAR(20) NOT NULL,  -- Número de telefone
+            tipo VARCHAR(50),  -- Tipo do telefone (ex: celular, fixo, comercial)
+            contato_id BIGINT NOT NULL,  -- Chave estrangeira para a tabela de Contato
+            CONSTRAINT fk_contato FOREIGN KEY (contato_id) REFERENCES contato(id) ON DELETE CASCADE
+            );
+        </sql>
+    </changeSet>
+
+
+    <changeSet id="5-create-endereco-table" author="Gabriel">
+        <sql>
+            CREATE TABLE endereco (
+            id BIGINT AUTO_INCREMENT PRIMARY KEY,
+            logradouro VARCHAR(150) NOT NULL,  -- Nome da rua, avenida, etc.
+            numero VARCHAR(20) NOT NULL,  -- Número da casa/apartamento
+            complemento VARCHAR(50),  -- Complemento como bloco, andar, etc.
+            bairro VARCHAR(100) NOT NULL,
+            cidade VARCHAR(100) NOT NULL,
+            estado VARCHAR(50),  -- Estado do endereço
+            cep VARCHAR(10) NOT NULL,  -- Código postal
+            contato_id BIGINT NOT NULL,  -- Chave estrangeira para a tabela de Contato
+            CONSTRAINT fk_contato_endereco FOREIGN KEY (contato_id) REFERENCES contato(id) ON DELETE CASCADE
+            );
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>
