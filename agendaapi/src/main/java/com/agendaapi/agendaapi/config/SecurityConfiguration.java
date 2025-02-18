@@ -36,6 +36,8 @@ public class SecurityConfiguration {
             "/v1/agenda/login",
             "/v1/agenda/create",
             "/swagger-ui/index.html",
+            "/actuator",
+            "/actuator/**",
             "/", "/swagger**/**", "/webjars/**", "/v3/**", "/error**"
     };
 

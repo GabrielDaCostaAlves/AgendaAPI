@@ -5,6 +5,8 @@
     <option name="originalFiles">
       <list>
         <option value="$PROJECT_DIR$/agendaapi/pom.xml" />
+        <option value="$PROJECT_DIR$/agendaapi/springbootadmin/pom.xml" />
+        <option value="$PROJECT_DIR$/springbootadmin/pom.xml" />
       </list>
     </option>
   </component>

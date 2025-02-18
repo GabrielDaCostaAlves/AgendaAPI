@@ -12,10 +12,20 @@
         </processorPath>
         <module name="agendaapi" />
       </profile>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="Spring-Boot-Admin" />
+      </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="springbootadmin" target="23" />
+    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="Spring-Boot-Admin" options="-parameters" />
       <module name="agendaapi" options="-parameters" />
     </option>
   </component>
