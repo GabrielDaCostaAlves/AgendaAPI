@@ -44,7 +44,7 @@ class UsuarioServiceTest {
     }
 
     @Test
-    void testCreateUser() {
+    void criarUsuarioTest() {
 
         Role role = new Role();
         role.setName(RoleName.ROLE_CUSTOMER);
@@ -64,7 +64,7 @@ class UsuarioServiceTest {
     }
 
     @Test
-    void testGetUsuarioById() {
+    void retornarUsuarioPorIdTest() {
 
         Long userId = 1L;
         Usuario usuario = new Usuario();
@@ -78,7 +78,7 @@ class UsuarioServiceTest {
     }
 
     @Test
-    void testUpdateUser() throws NoSuchFieldException, InvocationTargetException, IllegalAccessException, InstantiationException, NoSuchMethodException {
+    void atualizarUsuarioTest() throws NoSuchFieldException, InvocationTargetException, IllegalAccessException, InstantiationException, NoSuchMethodException {
 
         Usuario usuarioExistente = new Usuario();
         usuarioExistente.setEmail("email@teste.com");
@@ -99,7 +99,7 @@ class UsuarioServiceTest {
     }
 
     @Test
-    void testDeleteUser() {
+    void deletarUsuarioTest() {
 
         Usuario usuario = new Usuario();
         doNothing().when(usuarioRepository).delete(usuario);

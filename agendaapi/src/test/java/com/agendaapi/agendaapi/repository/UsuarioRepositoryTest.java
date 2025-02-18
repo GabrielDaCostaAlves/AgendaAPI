@@ -42,7 +42,7 @@ public class UsuarioRepositoryTest {
     }
 
     @Test
-    void shouldSaveUsuarioInDatabase() {
+    void salvarUsuarioNoBancoDeDadosTest() {
         Usuario savedUsuario = usuarioRepository.save(usuario);
         assertThat(savedUsuario).isNotNull();
         assertThat(savedUsuario.getId()).isGreaterThan(0);
@@ -50,14 +50,14 @@ public class UsuarioRepositoryTest {
     }
 
     @Test
-    void shouldFindUsuarioByEmail() {
+    void buscarUsuarioPorEmailTest() {
         usuarioRepository.save(usuario);
         Usuario foundUsuario = usuarioRepository.findByEmail("gabriel@teste.com").orElse(null);
         assertThat(foundUsuario).isNotNull();
     }
 
     @Test
-    void shouldNotSaveUsuarioWithDuplicateEmail() {
+    void deveSalvarUsuarioComEmailDuplicadoTest() {
         usuarioRepository.save(usuario);
         Usuario outroUsuario = new Usuario();
         outroUsuario.setNome("João");
@@ -69,14 +69,14 @@ public class UsuarioRepositoryTest {
     }
 
     @Test
-    void shouldDeleteUsuario() {
+    void excluirUsuarioTest() {
         Usuario savedUsuario = usuarioRepository.save(usuario);
         usuarioRepository.deleteById(savedUsuario.getId());
         assertThat(usuarioRepository.findById(savedUsuario.getId())).isEmpty();
     }
 
     @Test
-    void shouldUpdateUsuario() {
+    void atualizarUsuarioTest() {
         Usuario savedUsuario = usuarioRepository.save(usuario);
         savedUsuario.setNome("Gabriel Updated");
         Usuario updatedUsuario = usuarioRepository.save(savedUsuario);

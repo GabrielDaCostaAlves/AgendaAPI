@@ -57,7 +57,7 @@ class TelefoneServiceTest {
     }
 
     @Test
-    void testCreateTelefone() {
+    void criarTelefoneComSucesso() {
         TelefoneDto telefoneDto = new TelefoneDto("999999999", "MOBILE");
         when(contatoRepository.findById(1L)).thenReturn(Optional.of(contato));
         when(telefoneRepository.save(any(Telefone.class))).thenReturn(telefone);
@@ -70,7 +70,7 @@ class TelefoneServiceTest {
     }
 
     @Test
-    void testUpdateTelefone() {
+    void atualizarTelefoneComSucesso() {
         TelefoneDto telefoneDto = new TelefoneDto("888888888", "HOME");
         when(telefoneRepository.findById(1L)).thenReturn(Optional.of(telefone));
         when(telefoneRepository.save(any(Telefone.class))).thenReturn(telefone);
@@ -83,7 +83,7 @@ class TelefoneServiceTest {
     }
 
     @Test
-    void testDeleteTelefone() {
+    void deletarTelefoneComSucesso() {
         when(telefoneRepository.findById(1L)).thenReturn(Optional.of(telefone));
         doNothing().when(telefoneRepository).delete(telefone);
 
@@ -93,7 +93,7 @@ class TelefoneServiceTest {
     }
 
     @Test
-    void testGetTelefoneById() {
+    void retornarTelefonePorId() {
         when(telefoneRepository.findById(1L)).thenReturn(Optional.of(telefone));
 
         Telefone foundTelefone = telefoneService.getTelefoneById(usuario, 1L);
@@ -104,7 +104,7 @@ class TelefoneServiceTest {
     }
 
     @Test
-    void testGetTelefonesByUsuario() {
+    void retornarTelefonesPorUsuario() {
         Page<Telefone> telefonesPage = new PageImpl<>(List.of(telefone));
         when(contatoRepository.findById(1L)).thenReturn(Optional.of(contato));
         when(telefoneRepository.findByContatoId(eq(1L), any(PageRequest.class))).thenReturn(telefonesPage);

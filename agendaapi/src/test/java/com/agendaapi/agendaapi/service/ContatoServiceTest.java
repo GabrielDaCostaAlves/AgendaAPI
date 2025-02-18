@@ -39,7 +39,7 @@ class ContatoServiceTest {
     }
 
     @Test
-    void testCreateContato() {
+    void criarContatoTest() {
 
         ContatoDto contatoDto = new ContatoDto("Contato Teste", LocalDate.of(1990, 1, 1), null, null);
         Contato contatoMock = new Contato();
@@ -57,7 +57,7 @@ class ContatoServiceTest {
     }
 
     @Test
-    void testUpdateContato() {
+    void atualizarContatoTest() {
 
         Long contatoId = 1L;
         Contato existingContato = new Contato();
@@ -81,7 +81,7 @@ class ContatoServiceTest {
     }
 
     @Test
-    void testGetContatoById() {
+    void obterContatoPorIdTest() {
 
         Long contatoId = 1L;
         Contato contato = new Contato();
@@ -100,7 +100,7 @@ class ContatoServiceTest {
     }
 
     @Test
-    void testDeleteContato() {
+    void excluirContatoTest() {
 
         Long contatoId = 1L;
         Contato contato = new Contato();
@@ -118,7 +118,7 @@ class ContatoServiceTest {
     }
 
     @Test
-    void testGetAllContatos() {
+    void obterTodosContatosTest() {
 
         int page = 0;
         int size = 10;

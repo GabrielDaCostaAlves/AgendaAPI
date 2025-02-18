@@ -60,7 +60,7 @@ class EnderecoRepositoryTest {
     }
 
     @Test
-    void shouldSaveAddress() {
+    void salvarEnderecoCorretamenteTest() {
         Endereco endereco = new Endereco();
         endereco.setLogradouro("Rua Teste");
         endereco.setNumero("123");
@@ -78,7 +78,7 @@ class EnderecoRepositoryTest {
     }
 
     @Test
-    void shouldFindAddressById() {
+    void buscarEnderecoPorIdTest() {
         Endereco endereco = new Endereco();
         endereco.setLogradouro("Rua Teste");
         endereco.setNumero("123");
@@ -96,7 +96,7 @@ class EnderecoRepositoryTest {
     }
 
     @Test
-    void shouldFindAddressesByContact() {
+    void buscarEnderecosDeUmContatoComPaginacaoTest() {
         Endereco endereco1 = new Endereco();
         endereco1.setLogradouro("Rua 1");
         endereco1.setNumero("100");
@@ -124,7 +124,7 @@ class EnderecoRepositoryTest {
     }
 
     @Test
-    void shouldDeleteAddress() {
+    void excluirEnderecoTest() {
         Endereco endereco = new Endereco();
         endereco.setLogradouro("Rua Teste");
         endereco.setNumero("123");

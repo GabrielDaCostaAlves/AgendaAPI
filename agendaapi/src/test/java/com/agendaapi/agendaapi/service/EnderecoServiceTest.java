@@ -60,7 +60,7 @@ class EnderecoServiceTest {
     }
 
     @Test
-    void deveCriarEnderecoComSucesso() {
+    void criarEnderecoComSucessoTest() {
         when(contatoRepository.findById(1L)).thenReturn(Optional.of(contato));
         when(enderecoRepository.save(any(Endereco.class))).thenReturn(endereco);
 
@@ -71,14 +71,14 @@ class EnderecoServiceTest {
     }
 
     @Test
-    void deveLancarExcecaoAoCriarEnderecoComContatoInexistente() {
+    void lancarExcecaoAoCriarEnderecoComContatoInexistenteTest() {
         when(contatoRepository.findById(1L)).thenReturn(Optional.empty());
 
         assertThrows(RuntimeException.class, () -> enderecoService.createEndereco(usuario, enderecoDto, 1L));
     }
 
     @Test
-    void deveAtualizarEnderecoComSucesso() {
+    void atualizarEnderecoComSucessoTest() {
         when(enderecoRepository.findById(1L)).thenReturn(Optional.of(endereco));
         when(enderecoRepository.save(any(Endereco.class))).thenReturn(endereco);
 
@@ -90,14 +90,14 @@ class EnderecoServiceTest {
     }
 
     @Test
-    void deveLancarExcecaoAoAtualizarEnderecoInexistente() {
+    void lancarExcecaoAoAtualizarEnderecoInexistenteTest() {
         when(enderecoRepository.findById(1L)).thenReturn(Optional.empty());
 
         assertThrows(RuntimeException.class, () -> enderecoService.updateEndereco(usuario, 1L, enderecoDto));
     }
 
     @Test
-    void deveDeletarEnderecoComSucesso() {
+    void deletarEnderecoComSucessoTest() {
         when(enderecoRepository.findById(1L)).thenReturn(Optional.of(endereco));
         doNothing().when(enderecoRepository).delete(endereco);
 
@@ -106,14 +106,14 @@ class EnderecoServiceTest {
     }
 
     @Test
-    void deveLancarExcecaoAoDeletarEnderecoInexistente() {
+    void lancarExcecaoAoDeletarEnderecoInexistenteTest() {
         when(enderecoRepository.findById(1L)).thenReturn(Optional.empty());
 
         assertThrows(RuntimeException.class, () -> enderecoService.deleteEndereco(usuario, 1L));
     }
 
     @Test
-    void deveRetornarEnderecoPorId() {
+    void retornarEnderecoPorIdTest() {
         when(enderecoRepository.findById(1L)).thenReturn(Optional.of(endereco));
 
         Endereco enderecoRetornado = enderecoService.getEnderecoById(usuario, 1L);
@@ -123,14 +123,14 @@ class EnderecoServiceTest {
     }
 
     @Test
-    void deveLancarExcecaoQuandoEnderecoNaoEncontrado() {
+    void lancarExcecaoQuandoEnderecoNaoEncontradoTest() {
         when(enderecoRepository.findById(1L)).thenReturn(Optional.empty());
 
         assertThrows(EntityNotFoundException.class, () -> enderecoService.getEnderecoById(usuario, 1L));
     }
 
     @Test
-    void deveRetornarEnderecosPorContato() {
+    void retornarEnderecosPorContatoTest() {
         Page<Endereco> page = new PageImpl<>(List.of(endereco));
         when(contatoRepository.findById(1L)).thenReturn(Optional.of(contato));
         when(enderecoRepository.findByContatoId(eq(1L), any(Pageable.class))).thenReturn(page);

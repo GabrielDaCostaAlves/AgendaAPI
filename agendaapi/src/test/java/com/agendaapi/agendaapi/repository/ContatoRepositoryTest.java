@@ -55,14 +55,14 @@ public class ContatoRepositoryTest {
     }
 
     @Test
-    void shouldSaveAndFindContatoById() {
+    void salvarEEncontrarContatoPorIdTest() {
         Optional<Contato> foundContato = contatoRepository.findById(contato.getId());
         assertThat(foundContato).isPresent();
         assertThat(foundContato.get().getNome()).isEqualTo(contato.getNome());
     }
 
     @Test
-    void shouldUpdateContato() {
+    void atualizarContatoTest() {
         contato.setNome("Nome Atualizado");
         contatoRepository.save(contato);
 
@@ -72,14 +72,14 @@ public class ContatoRepositoryTest {
     }
 
     @Test
-    void shouldDeleteContato() {
+    void excluirContatoTest() {
         contatoRepository.delete(contato);
         Optional<Contato> deletedContato = contatoRepository.findById(contato.getId());
         assertThat(deletedContato).isEmpty();
     }
 
     @Test
-    void shouldReturnEmptyWhenContatoDoesNotExist() {
+    void retornarVazioQuandoContatoNaoExistirTest() {
         Optional<Contato> notFoundContato = contatoRepository.findById(999L);
         assertThat(notFoundContato).isEmpty();
     }

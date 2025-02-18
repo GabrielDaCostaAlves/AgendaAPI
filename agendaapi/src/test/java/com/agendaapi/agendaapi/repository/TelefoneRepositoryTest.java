@@ -62,7 +62,7 @@ class TelefoneRepositoryTest {
     }
 
     @Test
-    void shouldSavePhoneCorrectly() {
+    void salvarTelefoneCorretamenteTest() {
         Telefone telefone = new Telefone();
         telefone.setNumero("11987654321");
         telefone.setTipo("Celular");
@@ -77,7 +77,7 @@ class TelefoneRepositoryTest {
     }
 
     @Test
-    void shouldFindPhoneById() {
+    void buscarTelefonePorIdTest() {
         Telefone telefone = new Telefone();
         telefone.setNumero("11987654321");
         telefone.setTipo("Celular");
@@ -91,7 +91,7 @@ class TelefoneRepositoryTest {
     }
 
     @Test
-    void shouldFindPhonesOfAContactWithPagination() {
+    void buscarTelefonesDeUmContatoComPaginacaoTest() {
         Telefone telefone1 = new Telefone();
         telefone1.setNumero("11987654321");
         telefone1.setTipo("Celular");
@@ -111,7 +111,7 @@ class TelefoneRepositoryTest {
     }
 
     @Test
-    void shouldReturnEmptyPageIfContactHasNoPhones() {
+    void retornarPaginaVaziaSeContatoNaoTemTelefonesTest() {
         Pageable pageable = PageRequest.of(0, 10);
         Page<Telefone> telefones = telefoneRepository.findByContatoId(contato.getId(), pageable);
 
@@ -119,7 +119,7 @@ class TelefoneRepositoryTest {
     }
 
     @Test
-    void shouldReturnOnlyCorrectSizeOfPhonesPerPage() {
+    void retornarApenasOTamanhoCorretoDeTelefonesPorPaginaTest() {
         for (int i = 0; i < 15; i++) {
             Telefone telefone = new Telefone();
             telefone.setNumero("1198765432" + i);
@@ -136,7 +136,7 @@ class TelefoneRepositoryTest {
     }
 
     @Test
-    void shouldDeletePhone() {
+    void excluirTelefoneTest() {
         Telefone telefone = new Telefone();
         telefone.setNumero("11987654321");
         telefone.setTipo("Celular");
@@ -149,7 +149,7 @@ class TelefoneRepositoryTest {
         assertThat(telefoneExcluido).isEmpty();
     }
     @Test
-    void shouldUpdatePhoneNumber() {
+    void atualizarNumeroDeTelefoneTest() {
         Telefone telefone = new Telefone();
         telefone.setNumero("11999998888");
         telefone.setTipo("Celular");
